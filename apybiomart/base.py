@@ -28,8 +28,6 @@ class ServerBase:
             host (str): Url of host to connect to.
             path (str): Path on the host to access to the biomart service.
             port (int): Port to use for the connection.
-            use_cache (bool): Whether to cache requests.
-
         """
         # Use defaults if arg is None.
         host = host or DEFAULT_HOST
@@ -41,8 +39,8 @@ class ServerBase:
         host = self._remove_trailing_slash(host)
 
         # Ensure path starts with slash.
-        if not path.startswith('/'):
-            path = '/' + path
+        if not path.startswith("/"):
+            path = "/" + path
 
         self._host = host
         self._path = path
@@ -66,17 +64,17 @@ class ServerBase:
     @property
     def url(self):
         """Url used to connect to the biomart service."""
-        return '{}:{}{}'.format(self._host, self._port, self._path)
+        return "{}:{}{}".format(self._host, self._port, self._path)
 
     @staticmethod
-    def _add_http_prefix(url, prefix='http://'):
-        if not url.startswith('http://') or url.startswith('https://'):
+    def _add_http_prefix(url, prefix="http://"):
+        if not url.startswith("http://") or url.startswith("https://"):
             url = prefix + url
         return url
 
     @staticmethod
     def _remove_trailing_slash(url):
-        if url.endswith('/'):
+        if url.endswith("/"):
             url = url[:-1]
         return url
 

@@ -7,10 +7,11 @@ from .base import ServerBase, BiomartException, DEFAULT_SCHEMA
 
 
 class Dataset(ServerBase):
-    """Class representing a biomart dataset.
+    """
+    Class representing a biomart dataset.
 
-    This class is responsible for handling queries to biomart
-    datasets. Queries can select a subset of attributes and can be filtered
+    This class is responsible for handling queries to biomart datasets. 
+    Queries can select a subset of attributes and can be filtered
     using any available filters. A list of valid attributes is available in
     the attributes property. If no attributes are given, a set of default
     attributes is used. A list of valid filters is available in the filters
@@ -24,7 +25,6 @@ class Dataset(ServerBase):
         host (str): Url of host to connect to.
         path (str): Path on the host to access to the biomart service.
         port (int): Port to use for the connection.
-        use_cache (bool): Whether to cache requests.
         virtual_schema (str): The virtual schema of the dataset.
 
     Examples:
@@ -35,7 +35,7 @@ class Dataset(ServerBase):
         Querying the dataset:
             >>> dataset.query(attributes=['ensembl_gene_id',
             >>>                           'external_gene_name'],
-            >>>               filters={'chromosome_name': ['1','2']})
+            >>>               filters={'chromosome_name': ['1', '2']})
 
         Listing available attributes:
             >>> dataset.attributes
@@ -44,18 +44,16 @@ class Dataset(ServerBase):
         Listing available filters:
             >>> dataset.filters
             >>> dataset.list_filters()
-
     """
 
     def __init__(self,
                  name,
-                 display_name='',
+                 display_name="",
                  host=None,
                  path=None,
                  port=None,
-                 use_cache=True,
                  virtual_schema=DEFAULT_SCHEMA):
-        super().__init__(host=host, path=path, port=port, use_cache=use_cache)
+        super().__init__(host=host, path=path, port=port)
 
         self._name = name
         self._display_name = display_name
@@ -101,7 +99,8 @@ class Dataset(ServerBase):
         return self._default_attributes
 
     def list_attributes(self):
-        """Lists available attributes in a readable DataFrame format.
+        """
+        Lists available attributes in a readable DataFrame format.
 
         Returns:
             pd.DataFrame: Frame listing available attributes.
@@ -113,10 +112,11 @@ class Dataset(ServerBase):
 
         return pd.DataFrame.from_records(
             _row_gen(self.attributes),
-            columns=['name', 'display_name', 'description'])
+            columns=["name", "display_name", "description"])
 
     def list_filters(self):
-        """Lists available filters in a readable DataFrame format.
+        """
+        Lists available filters in a readable DataFrame format.
 
         Returns:
             pd.DataFrame: Frame listing available filters.
@@ -127,16 +127,16 @@ class Dataset(ServerBase):
                 yield (attr.name, attr.type, attr.description)
 
         return pd.DataFrame.from_records(
-            _row_gen(self.filters), columns=['name', 'type', 'description'])
+            _row_gen(self.filters), columns=["name", "type", "description"])
 
     def _fetch_configuration(self):
         # Get datasets using biomart.
-        response = self.get(type='configuration', dataset=self._name)
+        response = self.get(type="configuration", dataset=self._name)
 
         # Check response for problems.
-        if 'Problem retrieving configuration' in response.text:
-            raise BiomartException('Failed to retrieve dataset configuration, '
-                                   'check the dataset name and schema.')
+        if "Problem retrieving configuration" in response.text:
+            raise BiomartException("Failed to retrieve dataset configuration, "
+                                   "check the dataset name and schema.")
 
         # Get filters and attributes from xml.
         xml = ElementTree.fromstring(response.content)
@@ -148,25 +148,25 @@ class Dataset(ServerBase):
 
     @staticmethod
     def _filters_from_xml(xml):
-        for node in xml.iter('FilterDescription'):
+        for node in xml.iter("FilterDescription"):
             attrib = node.attrib
             yield Filter(
-                name=attrib['internalName'], type=attrib.get('type', ''))
+                name=attrib["internalName"], type=attrib.get("type", ""))
 
     @staticmethod
     def _attributes_from_xml(xml):
-        for page_index, page in enumerate(xml.iter('AttributePage')):
-            for desc in page.iter('AttributeDescription'):
+        for page_index, page in enumerate(xml.iter("AttributePage")):
+            for desc in page.iter("AttributeDescription"):
                 attrib = desc.attrib
 
                 # Default attributes can only be from the first page.
                 default = (page_index == 0 and
-                           attrib.get('default', '') == 'true')
+                           attrib.get("default", "") == "true")
 
                 yield Attribute(
-                    name=attrib['internalName'],
-                    display_name=attrib.get('displayName', ''),
-                    description=attrib.get('description', ''),
+                    name=attrib["internalName"],
+                    display_name=attrib.get("displayName", ""),
+                    description=attrib.get("description", ""),
                     default=default)
 
     def query(self,
@@ -174,9 +174,10 @@ class Dataset(ServerBase):
               filters=None,
               only_unique=True,
               use_attr_names=False,
-              dtypes = None
+              dtypes=None
               ):
-        """Queries the dataset to retrieve the contained data.
+        """
+        Queries the dataset to retrieve the contained data.
 
         Args:
             attributes (list[str]): Names of attributes to fetch in query.
@@ -215,17 +216,17 @@ class Dataset(ServerBase):
         # </Query>
 
         # Setup query element.
-        root = ElementTree.Element('Query')
-        root.set('virtualSchemaName', self._virtual_schema)
-        root.set('formatter', 'TSV')
-        root.set('header', '1')
-        root.set('uniqueRows', native_str(int(only_unique)))
-        root.set('datasetConfigVersion', '0.6')
+        root = ElementTree.Element("Query")
+        root.set("virtualSchemaName", self._virtual_schema)
+        root.set("formatter", "TSV")
+        root.set("header", "1")
+        root.set("uniqueRows", native_str(int(only_unique)))
+        root.set("datasetConfigVersion", "0.6")
 
         # Add dataset element.
-        dataset = ElementTree.SubElement(root, 'Dataset')
-        dataset.set('name', self.name)
-        dataset.set('interface', 'default')
+        dataset = ElementTree.SubElement(root, "Dataset")
+        dataset.set("name", self.name)
+        dataset.set("interface", "default")
 
         # Default to default attributes if none requested.
         if attributes is None:
@@ -238,8 +239,8 @@ class Dataset(ServerBase):
                 self._add_attr_node(dataset, attr)
             except KeyError:
                 raise BiomartException(
-                    'Unknown attribute {}, check dataset attributes '
-                    'for a list of valid attributes.'.format(name))
+                    "Unknown attribute {}, check dataset attributes "
+                    "for a list of valid attributes.".format(name))
 
         if filters is not None:
             # Add filter elements.
@@ -249,19 +250,19 @@ class Dataset(ServerBase):
                     self._add_filter_node(dataset, filter_, value)
                 except KeyError:
                     raise BiomartException(
-                        'Unknown filter {}, check dataset filters '
-                        'for a list of valid filters.'.format(name))
+                        "Unknown filter {}, check dataset filters "
+                        "for a list of valid filters.".format(name))
 
         # Fetch response.
         response = self.get(query=ElementTree.tostring(root))
 
         # Raise exception if an error occurred.
-        if 'Query ERROR' in response.text:
+        if "Query ERROR" in response.text:
             raise BiomartException(response.text)
 
         # Parse results into a DataFrame.
         try:
-            result = pd.read_csv(StringIO(response.text), sep='\t', dtype=dtypes)
+            result = pd.read_csv(StringIO(response.text), sep="\t", dtype=dtypes)
         # Type error is raised of a data type is not understood by pandas
         except TypeError as err:
             raise ValueError("Non valid data type is used in dtypes")
@@ -278,39 +279,40 @@ class Dataset(ServerBase):
 
     @staticmethod
     def _add_attr_node(root, attr):
-        attr_el = ElementTree.SubElement(root, 'Attribute')
-        attr_el.set('name', attr.name)
+        attr_el = ElementTree.SubElement(root, "Attribute")
+        attr_el.set("name", attr.name)
 
     @staticmethod
     def _add_filter_node(root, filter_, value):
         """Adds filter xml node to root."""
-        filter_el = ElementTree.SubElement(root, 'Filter')
-        filter_el.set('name', filter_.name)
+        filter_el = ElementTree.SubElement(root, "Filter")
+        filter_el.set("name", filter_.name)
 
         # Set filter value depending on type.
-        if filter_.type == 'boolean':
+        if filter_.type == "boolean":
             # Boolean case.
-            if value is True or value.lower() in {'included', 'only'}:
-                filter_el.set('excluded', '0')
-            elif value is False or value.lower() == 'excluded':
-                filter_el.set('excluded', '1')
+            if value is True or value.lower() in {"included", "only"}:
+                filter_el.set("excluded", "0")
+            elif value is False or value.lower() == "excluded":
+                filter_el.set("excluded", "1")
             else:
-                raise ValueError('Invalid value for boolean filter ({})'
+                raise ValueError("Invalid value for boolean filter ({})"
                                  .format(value))
         elif isinstance(value, list) or isinstance(value, tuple):
             # List case.
-            filter_el.set('value', ','.join(map(str, value)))
+            filter_el.set("value", ",".join(map(str, value)))
         else:
             # Default case.
-            filter_el.set('value', str(value))
+            filter_el.set("value", str(value))
 
     def __repr__(self):
-        return ('<biomart.Dataset name={!r}, display_name={!r}>'
+        return ("<biomart.Dataset name={!r}, display_name={!r}>"
                 .format(self._name, self._display_name))
 
 
-class Attribute(object):
-    """Biomart dataset attribute.
+class Attribute:
+    """
+    Biomart dataset attribute.
 
     Attributes:
         name (str): Attribute name.
@@ -319,8 +321,9 @@ class Attribute(object):
 
     """
 
-    def __init__(self, name, display_name='', description='', default=False):
-        """Attribute constructor.
+    def __init__(self, name, display_name="", description="", default=False):
+        """
+        Attribute constructor.
 
         Args:
             name (str): Attribute name.
@@ -356,13 +359,14 @@ class Attribute(object):
         return self._default
 
     def __repr__(self):
-        return (('<biomart.Attribute name={!r},'
-                 ' display_name={!r}, description={!r}>')
+        return (("<biomart.Attribute name={!r},"
+                 " display_name={!r}, description={!r}>")
                 .format(self._name, self._display_name, self._description))
 
 
 class Filter(object):
-    """Biomart dataset filter.
+    """
+    Biomart dataset filter.
 
     Attributes:
         name (str): Filter name.
@@ -371,8 +375,9 @@ class Filter(object):
 
     """
 
-    def __init__(self, name, type, description=''):
-        """ Filter constructor.
+    def __init__(self, name, type, description=""):
+        """
+        Filter constructor.
 
         Args:
             name (str): Filter name.
@@ -400,6 +405,6 @@ class Filter(object):
         return self._description
 
     def __repr__(self):
-        return ('<biomart.Filter name={!r}, type={!r}>'
+        return ("<biomart.Filter name={!r}, type={!r}>"
                 .format(self.name, self.type))
 

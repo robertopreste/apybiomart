@@ -7,7 +7,8 @@ from .mart import Mart
 
 
 class Server(ServerBase):
-    """Class representing a biomart server.
+    """
+    Class representing a biomart server.
 
     Typically used as main entry point to the biomart server. Provides
     functionality for listing and loading the marts that are available
@@ -26,20 +27,19 @@ class Server(ServerBase):
 
         Retrieving a mart:
             >>> mart = server['ENSEMBL_MART_ENSEMBL']
-
     """
 
     _MART_XML_MAP = {
-        'name': 'name',
-        'database_name': 'database',
-        'display_name': 'displayName',
-        'host': 'host',
-        'path': 'path',
-        'virtual_schema': 'serverVirtualSchema'
+        "name": "name",
+        "database_name": "database",
+        "display_name": "displayName",
+        "host": "host",
+        "path": "path",
+        "virtual_schema": "serverVirtualSchema"
     }
 
     def __init__(self, host=None, path=None, port=None, use_cache=True):
-        super().__init__(host=host, path=path, port=port, use_cache=use_cache)
+        super().__init__(host=host, path=path, port=port)
         self._marts = None
 
     def __getitem__(self, name):
@@ -53,7 +53,8 @@ class Server(ServerBase):
         return self._marts
 
     def list_marts(self):
-        """Lists available marts in a readable DataFrame format.
+        """
+        Lists available marts in a readable DataFrame format.
 
         Returns:
             pd.DataFrame: Frame listing available marts.
@@ -64,28 +65,28 @@ class Server(ServerBase):
                 yield (attr.name, attr.display_name)
 
         return pd.DataFrame.from_records(
-            _row_gen(self.marts), columns=['name', 'display_name'])
+            _row_gen(self.marts), columns=["name", "display_name"])
 
     def _fetch_marts(self):
-        response = self.get(type='registry')
+        response = self.get(type="registry")
 
         xml = xml_from_string(response.content)
         marts = [
             self._mart_from_xml(child)
-            for child in xml.findall('MartURLLocation')
+            for child in xml.findall("MartURLLocation")
         ]
 
         return {m.name: m for m in marts}
 
     def _mart_from_xml(self, node):
         params = {k: node.attrib[v] for k, v in self._MART_XML_MAP.items()}
-        params['extra_params'] = {
+        params["extra_params"] = {
             k: v
             for k, v in node.attrib.items()
             if k not in set(self._MART_XML_MAP.values())
         }
-        return Mart(use_cache=self.use_cache, **params)
+        return Mart(**params)
 
     def __repr__(self):
-        return ('<biomart.Server host={!r}, path={!r}, port={!r}>'
+        return ("<biomart.Server host={!r}, path={!r}, port={!r}>"
                 .format(self.host, self.path, self.port))
