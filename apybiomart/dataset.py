@@ -134,6 +134,7 @@ class Dataset(ServerBase):
 
     def _fetch_configuration(self) -> Tuple[Dict, Dict]:
         # Get datasets using biomart.
+        # response = self.get(type="configuration", dataset=self._name)
         response = self.get(type="configuration", dataset=self._name)
 
         # Check response for problems.

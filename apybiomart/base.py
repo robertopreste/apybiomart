@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
+import asyncio
+import aiohttp
+from collections import namedtuple
 from typing import Optional
 
 DEFAULT_HOST = "http://www.biomart.org"
@@ -106,25 +109,61 @@ class ServerBase:
             path = "/" + path
         return path
 
-    # TODO: will need to re-implement this
+    # def get(self, **params):
+    #     """Performs get request to the biomart service.
+    #
+    #     Args:
+    #         **params (dict of str: any): Arbitrary keyword arguments, which
+    #             are added as parameters to the get request to biomart.
+    #
+    #     Returns:
+    #         requests.models.Response: Response from biomart for the request.
+    #
+    #     """
+    #     if self._use_cache:
+    #         r = requests.get(self.url, params=params)
+    #     else:
+    #         with requests_cache.disabled():
+    #             r = requests.get(self.url, params=params)
+    #     r.raise_for_status()
+    #     return r
+
+    # async def get_async(self, session, **params):
+    #     async with session.get(self.url, **params) as res:
+    #         assert res.status == 200
+    #         return await res
+    #
+    # async def get(self, **params):
+    #     async with aiohttp.ClientSession() as session:
+    #         await self.get_async(session, **params)
+
+    # async def get_json(self, **params):
+    #     async with aiohttp.ClientSession() as session:
+    #         async with session.get(self.url, **params) as res:
+    #             assert res.status == 200
+    #             return await res.json()
+
+    async def get_text(self, **params):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(self.url, params=params) as res:
+                assert res.status == 200
+                return await res.text()
+
+    async def get_content(self, **params):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(self.url, params=params) as res:
+                assert res.status == 200
+                return await res.content.read()
+
     def get(self, **params):
-        """Performs get request to the biomart service.
-
-        Args:
-            **params (dict of str: any): Arbitrary keyword arguments, which
-                are added as parameters to the get request to biomart.
-
-        Returns:
-            requests.models.Response: Response from biomart for the request.
-
-        """
-        if self._use_cache:
-            r = requests.get(self.url, params=params)
-        else:
-            with requests_cache.disabled():
-                r = requests.get(self.url, params=params)
-        r.raise_for_status()
-        return r
+        loop = asyncio.get_event_loop()
+        tasks = [self.get_text(**params), self.get_content(**params)]
+        res = loop.run_until_complete(
+            asyncio.gather(*tasks)
+        )
+        Response = namedtuple("Response", "text content")
+        response = Response(text=res[0], content=res[1])
+        return response
 
 
 class BiomartException(Exception):
