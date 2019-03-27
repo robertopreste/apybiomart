@@ -12,3 +12,8 @@ History
 
 * Requests are converted to async calls;
 * Code style is clean and Python 3 compatible.
+
+0.1.2 (2019-03-27)
+==================
+
+* Add basic tests.
