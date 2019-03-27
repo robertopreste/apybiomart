@@ -23,7 +23,8 @@ class MockResponse(object):
 
     def __init__(self, text=''):
         self.text = text
-        self.content = text.encode('utf-8')
+        # self.content = text.encode('utf-8')
+        self.content = text
 
     def raise_for_status(self):
         """Mock raise_for_status function."""
@@ -125,9 +126,13 @@ def dataset_query_response():
     """Returns a cached Dataset query response."""
 
     # Dumped from inside query using the below code.
-    # import pickle
-    # with open('query_response.pkl', 'wb') as file_:
-    #    pickle.dump(response, file=file_, protocol=2)
+    # from apybiomart import Dataset
+    # dataset = Dataset("mmusculus_gene_ensembl",
+    #                   host="http://www.ensembl.org")
+    # response = dataset.query(attributes=["ensembl_gene_id",
+    #                                      "external_gene_name"])
+    # with open('tests/data/query_response.pkl', 'wb') as f:
+    #    pickle.dump(response.text, file=f, protocol=2)
 
     # Load cached request.
     file_path = pytest.helpers.data_path('query_response.pkl')

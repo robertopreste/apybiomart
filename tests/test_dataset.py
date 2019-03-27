@@ -12,7 +12,7 @@ class TestDatasetStatic(object):
         """Tests basic attributes."""
 
         assert mock_dataset.name == 'mmusculus_gene_ensembl'
-        assert mock_dataset.display_name == 'Mus musculus genes (GRCm38.p4)'
+        assert mock_dataset.display_name == 'Mouse genes (GRCm38.p6)'
 
     def test_fetch_configuration(self, mocker, mock_dataset,
                                  dataset_config_response):
@@ -38,8 +38,8 @@ class TestDatasetStatic(object):
         attr = mock_dataset.attributes['ensembl_gene_id']
 
         assert attr.name == 'ensembl_gene_id'
-        assert attr.display_name == 'Ensembl Gene ID'
-        assert attr.description == 'Ensembl Stable ID of the Gene'
+        assert attr.display_name == 'Gene stable ID'
+        assert attr.description == 'Stable ID of the Gene'
         assert attr.default
 
     def test_fetch_filters(self, mocker, mock_dataset,
@@ -53,7 +53,7 @@ class TestDatasetStatic(object):
         filt = mock_dataset.filters['chromosome_name']
 
         assert filt.name == 'chromosome_name'
-        assert filt.type == 'list'
+        assert filt.type == 'text'
         assert filt.description == ''
 
     def test_query(self, mocker, mock_dataset_with_config, query_params,
@@ -100,7 +100,7 @@ class TestDatasetStatic(object):
         assert 'ensembl_gene_id' in res
 
     def test_query_data_types(self, mocker, mock_dataset_with_config,
-                             query_params, dataset_query_response):
+                              query_params, dataset_query_response):
         """Tests example query with data types specified."""
 
         mock_dataset = mock_dataset_with_config
@@ -108,7 +108,7 @@ class TestDatasetStatic(object):
         mock_get = mocker.patch.object(
             mock_dataset, 'get', return_value=dataset_query_response)
 
-        data_types = {'Ensembl Gene ID': str}
+        data_types = {'Gene stable ID': str}
         query_params['dtypes'] = data_types
 
         # Perform query.
@@ -119,7 +119,7 @@ class TestDatasetStatic(object):
         assert 'Ensembl Gene ID' in res
 
     def test_query_non_valid_data_types(self, mocker, mock_dataset_with_config,
-                                         query_params, dataset_query_response):
+                                        query_params, dataset_query_response):
         """Tests example query with non valid data types specified."""
 
         mock_dataset = mock_dataset_with_config
@@ -127,7 +127,7 @@ class TestDatasetStatic(object):
         mock_get = mocker.patch.object(
             mock_dataset, 'get', return_value=dataset_query_response)
 
-        data_types = {'Ensembl Gene ID': 'hello'}
+        data_types = {'Gene stable ID': 'hello'}
         query_params['dtypes'] = data_types
 
         # Perform query.
