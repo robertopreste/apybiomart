@@ -145,13 +145,13 @@ class ServerBase:
 
     async def get_text(self, **params):
         async with aiohttp.ClientSession() as session:
-            async with session.get(self.url, params=params) as res:
+            async with session.get(self.url, ssl=False, params=params) as res:
                 assert res.status == 200
                 return await res.text()
 
     async def get_content(self, **params):
         async with aiohttp.ClientSession() as session:
-            async with session.get(self.url, params=params) as res:
+            async with session.get(self.url, ssl=False, params=params) as res:
                 assert res.status == 200
                 return await res.content.read()
 

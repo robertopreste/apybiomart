@@ -252,7 +252,8 @@ class Dataset(ServerBase):
                         "for a list of valid filters.".format(name))
 
         # Fetch response.
-        response = self.get(query=ET.tostring(root))
+        # print(type(ET.tostring(root)))
+        response = self.get(query=str(ET.tostring(root), "utf-8"))
 
         # Raise exception if an error occurred.
         if "Query ERROR" in response.text:
