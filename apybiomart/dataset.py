@@ -2,7 +2,9 @@
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
 import pandas as pd
-from xml.etree import ElementTree
+from xml.etree import ElementTree as ET
+from io import StringIO
+from typing import Optional, Tuple, Dict, List, Any
 from .base import ServerBase, BiomartException, DEFAULT_SCHEMA
 
 
@@ -47,12 +49,12 @@ class Dataset(ServerBase):
     """
 
     def __init__(self,
-                 name,
-                 display_name="",
-                 host=None,
-                 path=None,
-                 port=None,
-                 virtual_schema=DEFAULT_SCHEMA):
+                 name: str,
+                 display_name: str = "",
+                 host: Optional[str] = None,
+                 path: Optional[str] = None,
+                 port: Optional[int] = None,
+                 virtual_schema: str = DEFAULT_SCHEMA):
         super().__init__(host=host, path=path, port=port)
 
         self._name = name
@@ -98,38 +100,39 @@ class Dataset(ServerBase):
             }
         return self._default_attributes
 
-    def list_attributes(self):
+    def list_attributes(self) -> pd.DataFrame:
         """
-        Lists available attributes in a readable DataFrame format.
-
-        Returns:
-            pd.DataFrame: Frame listing available attributes.
+        List available attributes in a readable DataFrame format.
+        :return: pd.DataFrame
         """
 
-        def _row_gen(attributes):
+        def _row_gen(attributes: Dict):
             for attr in attributes.values():
                 yield (attr.name, attr.display_name, attr.description)
 
-        return pd.DataFrame.from_records(
-            _row_gen(self.attributes),
-            columns=["name", "display_name", "description"])
+        attr_df = pd.DataFrame.from_records(_row_gen(self.attributes),
+                                            columns=["name", "display_name",
+                                                     "description"])
 
-    def list_filters(self):
+        return attr_df
+
+    def list_filters(self) -> pd.DataFrame:
         """
-        Lists available filters in a readable DataFrame format.
-
-        Returns:
-            pd.DataFrame: Frame listing available filters.
+        List available filters in a readable DataFrame format.
+        :return: pd.DataFrame
         """
 
-        def _row_gen(attributes):
-            for attr in attributes.values():
-                yield (attr.name, attr.type, attr.description)
+        def _row_gen(filters: Dict):
+            for filt in filters.values():
+                yield (filt.name, filt.type, filt.description)
 
-        return pd.DataFrame.from_records(
-            _row_gen(self.filters), columns=["name", "type", "description"])
+        filt_df = pd.DataFrame.from_records(_row_gen(self.filters),
+                                            columns=["name", "type",
+                                                     "description"])
 
-    def _fetch_configuration(self):
+        return filt_df
+
+    def _fetch_configuration(self) -> Tuple[Dict, Dict]:
         # Get datasets using biomart.
         response = self.get(type="configuration", dataset=self._name)
 
@@ -139,7 +142,7 @@ class Dataset(ServerBase):
                                    "check the dataset name and schema.")
 
         # Get filters and attributes from xml.
-        xml = ElementTree.fromstring(response.content)
+        xml = ET.fromstring(response.content)
 
         filters = {f.name: f for f in self._filters_from_xml(xml)}
         attributes = {a.name: a for a in self._attributes_from_xml(xml)}
@@ -150,8 +153,8 @@ class Dataset(ServerBase):
     def _filters_from_xml(xml):
         for node in xml.iter("FilterDescription"):
             attrib = node.attrib
-            yield Filter(
-                name=attrib["internalName"], type=attrib.get("type", ""))
+            yield Filter(name=attrib["internalName"],
+                         type=attrib.get("type", ""))
 
     @staticmethod
     def _attributes_from_xml(xml):
@@ -163,43 +166,36 @@ class Dataset(ServerBase):
                 default = (page_index == 0 and
                            attrib.get("default", "") == "true")
 
-                yield Attribute(
-                    name=attrib["internalName"],
-                    display_name=attrib.get("displayName", ""),
-                    description=attrib.get("description", ""),
-                    default=default)
+                yield Attribute(name=attrib["internalName"],
+                                display_name=attrib.get("displayName", ""),
+                                description=attrib.get("description", ""),
+                                default=default)
 
     def query(self,
-              attributes=None,
-              filters=None,
-              only_unique=True,
-              use_attr_names=False,
-              dtypes=None
-              ):
+              attributes: List[str] = None,
+              filters: Dict[str, Any] = None,
+              only_unique: bool = True,
+              use_attr_names: bool = False,
+              dtypes: Dict[str, Any] = None
+              ) -> pd.DataFrame:
         """
         Queries the dataset to retrieve the contained data.
-
-        Args:
-            attributes (list[str]): Names of attributes to fetch in query.
-                Attribute names must correspond to valid attributes. See
-                the attributes property for a list of valid attributes.
-            filters (dict[str,any]): Dictionary of filters --> values
-                to filter the dataset by. Filter names and values must
-                correspond to valid filters and filter values. See the
-                filters property for a list of valid filters.
-            only_unique (bool): Whether to return only rows containing
-                unique values (True) or to include duplicate rows (False).
-            use_attr_names (bool): Whether to use the attribute names
-                as column names in the result (True) or the attribute
-                display names (False).
-            dtypes (dict[str,any]): Dictionary of attributes --> data types
-                to describe to pandas how the columns should be handled
-
-        Returns:
-            pandas.DataFrame: DataFrame containing the query results.
-
+        :param List[str] attributes: names of attributes to fetch in the query.
+        Attribute names must correspond to valid attributes. See the attributes
+        property for a list of valid attributes.
+        :param Dict[str, Any] filters: dictionary of filters to filter the
+        dataset by. Filter names and values must correspond to valid filters
+        and filter values. See the filters property for a list of valid
+        filters.
+        :param bool only_unique: whether to return only rows containing unique
+        values or to include duplicate rows (default: True)
+        :param bool use_attr_names: whether to use the attribute names as
+        column names in the result of the attribute display names
+        (default: False)
+        :param Dict[str, Any] dtypes: dictionary specifying the data type for
+        each attribute
+        :return: pd.DataFrame
         """
-
         # Example query from Ensembl biomart:
         #
         # <?xml version="1.0" encoding="UTF-8"?>
@@ -216,15 +212,16 @@ class Dataset(ServerBase):
         # </Query>
 
         # Setup query element.
-        root = ElementTree.Element("Query")
+        root = ET.Element("Query")
         root.set("virtualSchemaName", self._virtual_schema)
         root.set("formatter", "TSV")
         root.set("header", "1")
-        root.set("uniqueRows", native_str(int(only_unique)))
+        # root.set("uniqueRows", native_str(int(only_unique)))
+        root.set("uniqueRows", str(int(only_unique)))
         root.set("datasetConfigVersion", "0.6")
 
         # Add dataset element.
-        dataset = ElementTree.SubElement(root, "Dataset")
+        dataset = ET.SubElement(root, "Dataset")
         dataset.set("name", self.name)
         dataset.set("interface", "default")
 
@@ -254,7 +251,7 @@ class Dataset(ServerBase):
                         "for a list of valid filters.".format(name))
 
         # Fetch response.
-        response = self.get(query=ElementTree.tostring(root))
+        response = self.get(query=ET.tostring(root))
 
         # Raise exception if an error occurred.
         if "Query ERROR" in response.text:
@@ -262,7 +259,9 @@ class Dataset(ServerBase):
 
         # Parse results into a DataFrame.
         try:
-            result = pd.read_csv(StringIO(response.text), sep="\t", dtype=dtypes)
+            result = pd.read_csv(StringIO(response.text),
+                                 sep="\t",
+                                 dtype=dtypes)
         # Type error is raised of a data type is not understood by pandas
         except TypeError as err:
             raise ValueError("Non valid data type is used in dtypes")
@@ -279,13 +278,13 @@ class Dataset(ServerBase):
 
     @staticmethod
     def _add_attr_node(root, attr):
-        attr_el = ElementTree.SubElement(root, "Attribute")
+        attr_el = ET.SubElement(root, "Attribute")
         attr_el.set("name", attr.name)
 
     @staticmethod
     def _add_filter_node(root, filter_, value):
         """Adds filter xml node to root."""
-        filter_el = ElementTree.SubElement(root, "Filter")
+        filter_el = ET.SubElement(root, "Filter")
         filter_el.set("name", filter_.name)
 
         # Set filter value depending on type.
@@ -318,21 +317,15 @@ class Attribute:
         name (str): Attribute name.
         display_name (str): Attribute display name.
         description (str): Attribute description.
-
+        default (bool): Whether the attribute is a default attribute of the
+        corresponding datasets (default: False).
     """
 
-    def __init__(self, name, display_name="", description="", default=False):
-        """
-        Attribute constructor.
-
-        Args:
-            name (str): Attribute name.
-            display_name (str): Attribute display name.
-            description (str): Attribute description.
-            default (bool): Whether the attribute is a default
-                attribute of the corresponding datasets.
-
-        """
+    def __init__(self,
+                 name: str,
+                 display_name: str = "",
+                 description: str = "",
+                 default: bool = False):
         self._name = name
         self._display_name = display_name
         self._description = description
@@ -372,19 +365,12 @@ class Filter(object):
         name (str): Filter name.
         type (str): Type of the filter (boolean, int, etc.).
         description (str): Filter description.
-
     """
 
-    def __init__(self, name, type, description=""):
-        """
-        Filter constructor.
-
-        Args:
-            name (str): Filter name.
-            type (str): Type of the filter (boolean, int, etc.).
-            description (str): Filter description.
-
-        """
+    def __init__(self,
+                 name: str,
+                 type: str,
+                 description: str = ""):
         self._name = name
         self._type = type
         self._description = description

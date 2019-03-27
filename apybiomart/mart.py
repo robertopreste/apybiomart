@@ -2,6 +2,8 @@
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
 import pandas as pd
+from io import StringIO
+from typing import Optional, Dict, Any
 from .base import ServerBase, DEFAULT_SCHEMA
 from .dataset import Dataset
 
@@ -21,7 +23,6 @@ class Mart(ServerBase):
         host (str): Url of host to connect to.
         path (str): Path on the host to access to the biomart service.
         port (int): Port to use for the connection.
-        use_cache (bool): Whether to cache requests.
         virtual_schema (str): The virtual schema of the dataset.
 
     Examples:
@@ -38,11 +39,16 @@ class Mart(ServerBase):
     RESULT_COLNAMES = ["type", "name", "display_name", "unknown", "unknown2",
                        "unknown3", "unknown4", "virtual_schema", "unknown5"]
 
-    def __init__(self, name, database_name, display_name,
-                 host=None, path=None, port=None, use_cache=True,
-                 virtual_schema=DEFAULT_SCHEMA, extra_params=None):
-        super().__init__(host=host, path=path,
-                         port=port)
+    def __init__(self,
+                 name: str,
+                 database_name: str,
+                 display_name: str,
+                 host: Optional[str] = None,
+                 path: Optional[str] = None,
+                 port: Optional[int] = None,
+                 virtual_schema: str = DEFAULT_SCHEMA,
+                 extra_params: Optional = None):
+        super().__init__(host=host, path=path, port=port)
 
         self._name = name
         self._database_name = database_name
@@ -78,7 +84,7 @@ class Mart(ServerBase):
             self._datasets = self._fetch_datasets()
         return self._datasets
 
-    def list_datasets(self):
+    def list_datasets(self) -> pd.DataFrame:
         """
         Lists available datasets in a readable DataFrame format.
 
@@ -89,17 +95,16 @@ class Mart(ServerBase):
             for attr in attributes.values():
                 yield (attr.name, attr.display_name)
 
-        return pd.DataFrame.from_records(
-            _row_gen(self.datasets),
-            columns=["name", "display_name"])
+        return pd.DataFrame.from_records(_row_gen(self.datasets),
+                                         columns=["name", "display_name"])
 
-    def _fetch_datasets(self):
+    def _fetch_datasets(self) -> Dict[str, Any]:
         # Get datasets using biomart.
         response = self.get(type="datasets", mart=self._name)
 
         # Read result frame from response.
-        result = pd.read_csv(StringIO(response.text), sep="\t",
-                             header=None, names=self.RESULT_COLNAMES)
+        result = pd.read_csv(StringIO(response.text),
+                             sep="\t", header=None, names=self.RESULT_COLNAMES)
 
         # Convert result to a dict of datasets.
         datasets = (self._dataset_from_row(row)
@@ -107,14 +112,12 @@ class Mart(ServerBase):
 
         return {d.name: d for d in datasets}
 
-    def _dataset_from_row(self, row):
+    def _dataset_from_row(self, row) -> Dataset:
         return Dataset(name=row["name"], display_name=row["display_name"],
-                       host=self.host, path=self.path,
-                       port=self.port,
+                       host=self.host, path=self.path, port=self.port,
                        virtual_schema=row["virtual_schema"])
 
     def __repr__(self):
         return (("<biomart.Mart name={!r}, display_name={!r},"
                  " database_name={!r}>")
-                .format(self._name, self._display_name,
-                        self._database_name))
+                .format(self._name, self._display_name, self._database_name))

@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
-from xml.etree.ElementTree import fromstring as xml_from_string
+import pandas as pd
+from xml.etree import ElementTree as ET
+from typing import Optional, Dict, Any
 from .base import ServerBase
 from .mart import Mart
 
@@ -18,7 +20,6 @@ class Server(ServerBase):
         host (str): Url of host to connect to.
         path (str): Path on the host to access to the biomart service.
         port (int): Port to use for the connection.
-        use_cache (bool): Whether to cache requests.
 
     Examples:
         Connecting to a server and listing available marts:
@@ -38,7 +39,10 @@ class Server(ServerBase):
         "virtual_schema": "serverVirtualSchema"
     }
 
-    def __init__(self, host=None, path=None, port=None, use_cache=True):
+    def __init__(self,
+                 host: Optional[str] = None,
+                 path: Optional[str] = None,
+                 port: Optional[str] = None):
         super().__init__(host=host, path=path, port=port)
         self._marts = None
 
@@ -52,7 +56,7 @@ class Server(ServerBase):
             self._marts = self._fetch_marts()
         return self._marts
 
-    def list_marts(self):
+    def list_marts(self) -> pd.DataFrame:
         """
         Lists available marts in a readable DataFrame format.
 
@@ -64,13 +68,13 @@ class Server(ServerBase):
             for attr in attributes.values():
                 yield (attr.name, attr.display_name)
 
-        return pd.DataFrame.from_records(
-            _row_gen(self.marts), columns=["name", "display_name"])
+        return pd.DataFrame.from_records(_row_gen(self.marts),
+                                         columns=["name", "display_name"])
 
-    def _fetch_marts(self):
+    def _fetch_marts(self) -> Dict[str, Any]:
         response = self.get(type="registry")
 
-        xml = xml_from_string(response.content)
+        xml = ET.fromstring(response.content)
         marts = [
             self._mart_from_xml(child)
             for child in xml.findall("MartURLLocation")
@@ -85,6 +89,7 @@ class Server(ServerBase):
             for k, v in node.attrib.items()
             if k not in set(self._MART_XML_MAP.values())
         }
+
         return Mart(**params)
 
     def __repr__(self):

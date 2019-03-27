@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
+from typing import Optional
 
 DEFAULT_HOST = "http://www.biomart.org"
 DEFAULT_PATH = "/biomart/martservice"
@@ -21,26 +22,28 @@ class ServerBase:
         # cache is disabled
     """
 
-    def __init__(self, host=None, path=None, port=None):
-        """ServerBase constructor.
-
-        Args:
-            host (str): Url of host to connect to.
-            path (str): Path on the host to access to the biomart service.
-            port (int): Port to use for the connection.
+    def __init__(self,
+                 host: Optional[str] = None,
+                 path: Optional[str] = None,
+                 port: Optional[int] = None):
+        """
+        ServerBase constructor.
+        :param Optional[str] host: url of the host to connect to
+        :param Optional[str] path: path on the host to access the biomart
+        service
+        :param Optional[int] port: port to use for the connection
         """
         # Use defaults if arg is None.
-        host = host or DEFAULT_HOST
-        path = path or DEFAULT_PATH
-        port = port or DEFAULT_PORT
+        host: str = host or DEFAULT_HOST
+        path: str = path or DEFAULT_PATH
+        port: str = port or DEFAULT_PORT
 
         # Add http prefix and remove trailing slash.
         host = self._add_http_prefix(host)
         host = self._remove_trailing_slash(host)
 
         # Ensure path starts with slash.
-        if not path.startswith("/"):
-            path = "/" + path
+        path = self._add_leading_slash(path)
 
         self._host = host
         self._path = path
@@ -67,16 +70,41 @@ class ServerBase:
         return "{}:{}{}".format(self._host, self._port, self._path)
 
     @staticmethod
-    def _add_http_prefix(url, prefix="http://"):
+    def _add_http_prefix(url: str,
+                         prefix: str = "http://") -> str:
+        """
+        Add an http:// or https:// prefix to the given url, if this is not
+        already present in the url.
+        :param str url: input url
+        :param str prefix: url prefix to add if not already present
+        (default: 'http://')
+        :return: str
+        """
         if not url.startswith("http://") or url.startswith("https://"):
             url = prefix + url
         return url
 
     @staticmethod
-    def _remove_trailing_slash(url):
+    def _remove_trailing_slash(url: str) -> str:
+        """
+        Remove the trailing forward slash from the given url, if present.
+        :param str url: input url
+        :return: str
+        """
         if url.endswith("/"):
             url = url[:-1]
         return url
+
+    @staticmethod
+    def _add_leading_slash(path: str) -> str:
+        """
+        Add a leading forward slash to the given path, if not already present.
+        :param str path: input path
+        :return: str
+        """
+        if not path.startswith("/"):
+            path = "/" + path
+        return path
 
     # TODO: will need to re-implement this
     def get(self, **params):
