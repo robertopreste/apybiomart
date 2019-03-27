@@ -11,8 +11,8 @@ class TestMartStatic(object):
         """Tests setting of basic mart attributes."""
 
         assert mock_mart.name == 'ENSEMBL_MART_ENSEMBL'
-        assert mock_mart.display_name == 'Ensembl Genes 84'
-        assert mock_mart.database_name == 'ensembl_mart_84'
+        assert mock_mart.display_name == 'Ensembl Genes 95'
+        assert mock_mart.database_name == 'ensembl_mart_95'
 
     def test_datasets(self, mocker, mock_mart, mart_datasets_response):
         """Tests retrieval of datasets."""

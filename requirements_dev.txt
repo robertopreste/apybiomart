@@ -14,3 +14,5 @@ pytest-runner==4.2
 asyncio
 aiohttp
 pandas
+pytest-helpers-namespace
+pytest-mock

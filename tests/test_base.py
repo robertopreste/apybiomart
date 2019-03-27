@@ -45,27 +45,27 @@ class TestServerBase(object):
 
         assert base_obj.host == 'http://www.ensembl.org'
 
-    # def test_get(self, mocker, default_url):
-    #     """Tests get invocation."""
-    #
-    #     req = pytest.helpers.mock_response()
-    #
-    #     mock_get = mocker.patch.object(requests, 'get', return_value=req)
-    #
-    #     base_obj = ServerBase()
-    #     base_obj.get()
-    #
-    #     mock_get.assert_called_once_with(default_url, params={})
-    #
-    # def test_get_with_params(self, mocker, default_url):
-    #     """Tests get invocation with custom parameters."""
-    #
-    #     req = pytest.helpers.mock_response()
-    #
-    #     mock_get = mocker.patch.object(requests, 'get', return_value=req)
-    #
-    #     base_obj = ServerBase()
-    #     base_obj.get(test=True)
-    #
-    #     mock_get.assert_called_once_with(default_url, params={'test': True})
+    def test_get(self, mocker, default_url):
+        """Tests get invocation."""
+
+        req = pytest.helpers.mock_response()
+
+        mock_get = mocker.patch.object(requests, 'get', return_value=req)
+
+        base_obj = ServerBase()
+        base_obj.get()
+
+        mock_get.assert_called_once_with(default_url, params={})
+
+    def test_get_with_params(self, mocker, default_url):
+        """Tests get invocation with custom parameters."""
+
+        req = pytest.helpers.mock_response()
+
+        mock_get = mocker.patch.object(requests, 'get', return_value=req)
+
+        base_obj = ServerBase()
+        base_obj.get(test=True)
+
+        mock_get.assert_called_once_with(default_url, params={'test': True})
 
