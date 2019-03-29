@@ -39,7 +39,7 @@ class ServerBase:
         # Use defaults if arg is None.
         host: str = host or DEFAULT_HOST
         path: str = path or DEFAULT_PATH
-        port: str = port or DEFAULT_PORT
+        port: int = port or DEFAULT_PORT
 
         # Add http prefix and remove trailing slash.
         host = self._add_http_prefix(host)
@@ -155,15 +155,18 @@ class ServerBase:
                 assert res.status == 200
                 return await res.content.read()
 
-    def get(self, **params):
-        loop = asyncio.get_event_loop()
-        tasks = [self.get_text(**params), self.get_content(**params)]
-        res = loop.run_until_complete(
-            asyncio.gather(*tasks)
-        )
-        Response = namedtuple("Response", "text content")
-        response = Response(text=res[0], content=res[1])
-        return response
+    # async def get(self, **params):
+    #     # loop = asyncio.get_event_loop()
+    #     # tasks = [self.get_text(**params), self.get_content(**params)]
+    #     # res = loop.run_until_complete(
+    #     #     asyncio.gather(*tasks)
+    #     # )
+    #     text = await self.get_text(**params)
+    #     content = await self.get_content(**params)
+    #     Response = namedtuple("Response", "text content")
+    #     # response = Response(text=res[0], content=res[1])
+    #     response = Response(text=text, content=content)
+    #     return response
 
 
 class BiomartException(Exception):

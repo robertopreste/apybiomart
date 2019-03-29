@@ -100,10 +100,13 @@ class Mart(ServerBase):
 
     def _fetch_datasets(self) -> Dict[str, Any]:
         # Get datasets using biomart.
-        response = self.get(type="datasets", mart=self._name)
+        # response = self.get(type="datasets", mart=self._name)
+        # response = await self.get(type="datasets", mart=self._name)
+        resp_text = self.get_text(type="datasets", mart=self._name)
 
         # Read result frame from response.
-        result = pd.read_csv(StringIO(response.text),
+        # result = pd.read_csv(StringIO(response.text),
+        result = pd.read_csv(StringIO(resp_text),
                              sep="\t", header=None, names=self.RESULT_COLNAMES)
 
         # Convert result to a dict of datasets.

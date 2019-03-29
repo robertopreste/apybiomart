@@ -72,9 +72,12 @@ class Server(ServerBase):
                                          columns=["name", "display_name"])
 
     def _fetch_marts(self) -> Dict[str, Any]:
-        response = self.get(type="registry")
+        # response = self.get(type="registry")
+        # response = await self.get(type="registry")
+        resp_cont = self.get_content(type="registry")
 
-        xml = ET.fromstring(response.content)
+        # xml = ET.fromstring(response.content)
+        xml = ET.fromstring(resp_cont)
         marts = [
             self._mart_from_xml(child)
             for child in xml.findall("MartURLLocation")

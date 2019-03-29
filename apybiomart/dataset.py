@@ -132,18 +132,23 @@ class Dataset(ServerBase):
 
         return filt_df
 
-    def _fetch_configuration(self) -> Tuple[Dict, Dict]:
+    async def _fetch_configuration(self) -> Tuple[Dict, Dict]:
         # Get datasets using biomart.
         # response = self.get(type="configuration", dataset=self._name)
-        response = self.get(type="configuration", dataset=self._name)
+        # response = self.get(type="configuration", dataset=self._name)
+        # response = await self.get(type="configuration", dataset=self._name)
+        resp_text = await self.get_text(type="configuration", dataset=self._name)
+        resp_cont = await self.get_content(type="configuration", dataset=self._name)
 
         # Check response for problems.
-        if "Problem retrieving configuration" in response.text:
+        # if "Problem retrieving configuration" in response.text:
+        if "Problem retrieving configuration" in resp_text:
             raise BiomartException("Failed to retrieve dataset configuration, "
                                    "check the dataset name and schema.")
 
         # Get filters and attributes from xml.
-        xml = ET.fromstring(response.content)
+        # xml = ET.fromstring(response.content)
+        xml = ET.fromstring(resp_cont)
 
         filters = {f.name: f for f in self._filters_from_xml(xml)}
         attributes = {a.name: a for a in self._attributes_from_xml(xml)}
@@ -253,15 +258,20 @@ class Dataset(ServerBase):
 
         # Fetch response.
         # print(type(ET.tostring(root)))
-        response = self.get(query=str(ET.tostring(root), "utf-8"))
+        # response = self.get(query=str(ET.tostring(root), "utf-8"))
+        # response = await self.get(query=str(ET.tostring(root), "utf-8"))
+        resp_text = self.get_text(query=str(ET.tostring(root), "utf-8"))
 
         # Raise exception if an error occurred.
-        if "Query ERROR" in response.text:
-            raise BiomartException(response.text)
+        # if "Query ERROR" in response.text:
+        if "Query ERROR" in resp_text:
+            # raise BiomartException(response.text)
+            raise BiomartException(resp_text)
 
         # Parse results into a DataFrame.
         try:
-            result = pd.read_csv(StringIO(response.text),
+            # result = pd.read_csv(StringIO(response.text),
+            result = pd.read_csv(StringIO(resp_text),
                                  sep="\t",
                                  dtype=dtypes)
         # Type error is raised of a data type is not understood by pandas
