@@ -3,6 +3,7 @@
 # Created by Roberto Preste
 import asyncio
 import aiohttp
+import io
 import requests
 import pandas as pd
 import xml.etree.ElementTree as ET
@@ -53,9 +54,25 @@ class MartServer(Server):
         
 
 class DatasetServer(Server): 
-    def __init__(self):
+    def __init__(self, mart: str):
         super().__init__()
-        pass
+        self.mart = mart
+
+    def list_datasets(self):
+        df = pd.read_csv(self._fetch_datasets(),
+                         sep="\t",
+                         names=["type", "name", "display_name", "unknown",
+                                "unknown2", "unknown3", "unknown4",
+                                "virtual_schema", "unknown5"],
+                         usecols=["name", "display_name"])
+        df["mart"] = self.mart
+
+        return df
+
+    def _fetch_datasets(self):
+        resp = self.get_sync(type="datasets", mart=self.mart)
+        
+        return io.StringIO(resp.text)
 
 
 
