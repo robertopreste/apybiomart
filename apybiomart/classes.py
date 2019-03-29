@@ -31,7 +31,8 @@ class MartServer(Server):
         super().__init__()
 
     def list_marts(self):
-        return pd.DataFrame.from_records(self._fetch_marts())
+        return pd.DataFrame.from_records(self._fetch_marts(),
+                                         columns=["name", "display_name"])
     
     def _fetch_marts(self):
         resp = self.get_sync(type="registry")

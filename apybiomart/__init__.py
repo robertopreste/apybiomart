@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
-from .server import Server
-from .mart import Mart
-from .dataset import Dataset
+from apybiomart.apybiomart import list_marts
 
 __author__ = """Roberto Preste"""
 __email__ = 'robertopreste@gmail.com'
