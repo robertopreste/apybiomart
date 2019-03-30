@@ -10,6 +10,11 @@ from xml.etree import ElementTree as ET
 from typing import Optional, Dict, Any, Tuple, Generator
 
 
+class BiomartException(Exception):
+    """Basic exception class for biomart exceptions."""
+    pass
+
+
 class Server:
     def __init__(self,
                  host: str = "http://www.ensembl.org/biomart/martservice"):
@@ -55,7 +60,8 @@ class MartServer(Server):
                 "display_name": marts[1]}
 
     @staticmethod
-    def _mart_from_xml(xml) -> Generator[str, str]:
+    # def _mart_from_xml(xml) -> Generator[str, str]:
+    def _mart_from_xml(xml):
         """
         Parse the xml to extract name and display name of each mart.
         :param xml: ElementTree retrieved from Biomart
@@ -194,3 +200,86 @@ class FiltersServer(Server):
                    filt.get("description", ""))
 
 
+class Query(Server):
+    def __init__(self, attributes, filters, dataset):
+        super().__init__()
+        self.attributes = attributes
+        self.filters = filters
+        self.dataset = dataset
+
+    def _create_query(self):
+        # Setup query element.
+        root = ET.Element("Query")
+        root.set("virtualSchemaName", "default")
+        root.set("formatter", "TSV")
+        root.set("header", "1")
+        # root.set("uniqueRows", str(int(only_unique)))
+        root.set("datasetConfigVersion", "0.6")
+        # Add dataset element.
+        dataset = ET.SubElement(root, "Dataset")
+        dataset.set("name", self.dataset)
+        dataset.set("interface", "default")
+
+        # Add attribute elements.
+        for name in self.attributes:
+            try:
+                self._add_attr_node(dataset, name)
+            except KeyError:
+                raise BiomartException(
+                    "Unknown attribute {}, check dataset attributes "
+                    "for a list of valid attributes.".format(name))
+
+        if self.filters is not None:
+            # Add filter elements.
+            for name, value in self.filters.items():
+                try:
+                    self._add_filter_node(dataset, name, value)
+                except KeyError:
+                    raise BiomartException(
+                        "Unknown filter {}, check dataset filters "
+                        "for a list of valid filters.".format(name))
+
+        resp = self.get_sync(query=str(ET.tostring(root), "utf-8"))
+
+        if "Query ERROR" in resp.text:
+            raise BiomartException(resp.text)
+
+        try:
+            result = pd.read_csv(io.StringIO(resp.text), sep="\t")
+        # Type error is raised of a data type is not understood by pandas
+        except TypeError as err:
+            raise ValueError("Non valid data type is used in dtypes")
+
+        return result
+
+    @staticmethod
+    def _add_attr_node(root, attr):
+        attr_el = ET.SubElement(root, "Attribute")
+        attr_el.set("name", attr)
+
+    @staticmethod
+    def _add_filter_node(root, name, value):
+        """Adds filter xml node to root."""
+        filter_el = ET.SubElement(root, "Filter")
+        filter_el.set("name", name)
+
+        # TODO
+        # Set filter value depending on type.
+        if isinstance(value, list) or isinstance(value, tuple):
+            # List case.
+            filter_el.set("value", ",".join(map(str, value)))
+        # if name.type == "boolean":
+            # Boolean case.
+        elif value is True or value.lower() in {"included", "only"}:
+            filter_el.set("excluded", "0")
+        elif value is False or value.lower() == "excluded":
+            filter_el.set("excluded", "1")
+        # else:
+        #     raise ValueError("Invalid value for boolean filter ({})"
+        #                      .format(value))
+        elif isinstance(value, list) or isinstance(value, tuple):
+            # List case.
+            filter_el.set("value", ",".join(map(str, value)))
+        else:
+            # Default case.
+            filter_el.set("value", str(value))
