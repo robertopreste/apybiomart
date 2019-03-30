@@ -33,25 +33,22 @@ class MartServer(Server):
 
     def list_marts(self):
         return pd.DataFrame.from_records(self._fetch_marts(),
-                                         columns=["name", "display_name"])
+                                         columns=["name",
+                                                  "display_name"])
     
     def _fetch_marts(self):
         resp = self.get_sync(type="registry")
         xml = ET.fromstring(resp.content)
-        # TODO: will need to change this double call to xml.findall()
-        names = [self._mart_name_from_xml(child)
-                 for child in xml.findall("MartURLLocation")]
-        displays = [self._mart_display_from_xml(child)
-                    for child in xml.findall("MartURLLocation")]
+        marts = list(zip(*self._mart_from_xml(xml)))
 
-        return {"name": names, "display_name": displays}
+        return {"name": marts[0],
+                "display_name": marts[1]}
 
-    def _mart_name_from_xml(self, node):
-        return node.attrib["name"]
+    def _mart_from_xml(self, xml):
+        for child in xml.findall("MartURLLocation"):
+            yield (child.attrib["name"],
+                   child.attrib["displayName"])
 
-    def _mart_display_from_xml(self, node):
-        return node.attrib["displayName"]
-        
 
 class DatasetServer(Server): 
     def __init__(self, mart: str):
@@ -82,17 +79,18 @@ class AttributesServer(Server):
 
     def list_attributes(self):
         return pd.DataFrame.from_records(self._fetch_attributes(),
-                                         columns=["name", "display_name", "description"])
+                                         columns=["name",
+                                                  "display_name",
+                                                  "description"])
 
     def _fetch_attributes(self):
         resp = self.get_sync(type="configuration", dataset=self.dataset)
         xml = ET.fromstring(resp.content)
-        attribs = [el for el in self._attributes_from_xml(xml)]
-        attribs_zip = list(zip(*attribs))
+        attribs = list(zip(*self._attributes_from_xml(xml)))
 
-        return {"name": attribs_zip[0],
-                "display_name": attribs_zip[1],
-                "description": attribs_zip[2]}
+        return {"name": attribs[0],
+                "display_name": attribs[1],
+                "description": attribs[2]}
 
     def _attributes_from_xml(self, xml):
         for page in xml.iter("AttributePage"):
@@ -116,12 +114,11 @@ class FiltersServer(Server):
     def _fetch_filters(self):
         resp = self.get_sync(type="configuration", dataset=self.dataset)
         xml = ET.fromstring(resp.content)
-        filters = [el for el in self._filters_from_xml(xml)]
-        filters_zip = list(zip(*filters))
+        filters = list(zip(*self._filters_from_xml(xml)))
 
-        return {"name": filters_zip[0],
-                "type": filters_zip[1],
-                "description": filters_zip[2]}
+        return {"name": filters[0],
+                "type": filters[1],
+                "description": filters[2]}
 
     def _filters_from_xml(self, xml):
         for node in xml.iter("FilterDescription"):
