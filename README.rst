@@ -40,8 +40,8 @@ TODO
 * a set of `list_*()` functions (that may not necessarily be async), that list:
     - ~~available marts~~
     - ~~available datasets for a specific mart (should take an optional `mart` argument defaulting to one of the available ones)~~
-    - available attributes for a dataset (same as above, with a dataset and mart)
-    - available filters for a dataset (same as above)
+    - ~~available attributes for a dataset (same as above, with a dataset)~~
+    - ~~available filters for a dataset (same as above)~~
 
 Credits
 -------
