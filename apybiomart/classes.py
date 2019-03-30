@@ -75,6 +75,59 @@ class DatasetServer(Server):
         return io.StringIO(resp.text)
 
 
+class AttributesServer(Server):
+    def __init__(self, dataset: str):
+        super().__init__()
+        self.dataset = dataset
 
+    def list_attributes(self):
+        return pd.DataFrame.from_records(self._fetch_attributes(),
+                                         columns=["name", "display_name", "description"])
+
+    def _fetch_attributes(self):
+        resp = self.get_sync(type="configuration", dataset=self.dataset)
+        xml = ET.fromstring(resp.content)
+        attribs = [el for el in self._attributes_from_xml(xml)]
+        attribs_zip = list(zip(*attribs))
+
+        return {"name": attribs_zip[0],
+                "display_name": attribs_zip[1],
+                "description": attribs_zip[2]}
+
+    def _attributes_from_xml(self, xml):
+        for page in xml.iter("AttributePage"):
+            for desc in page.iter("AttributeDescription"):
+                attrib = desc.attrib
+
+                yield (attrib["internalName"],
+                       attrib.get("displayName", ""),
+                       attrib.get("description", ""))
+
+
+class FiltersServer(Server):
+    def __init__(self, dataset: str):
+        super().__init__()
+        self.dataset = dataset
+
+    def list_filters(self):
+        return pd.DataFrame.from_records(self._fetch_filters(),
+                                         columns=["name", "type", "description"])
+
+    def _fetch_filters(self):
+        resp = self.get_sync(type="configuration", dataset=self.dataset)
+        xml = ET.fromstring(resp.content)
+        filters = [el for el in self._filters_from_xml(xml)]
+        filters_zip = list(zip(*filters))
+
+        return {"name": filters_zip[0],
+                "type": filters_zip[1],
+                "description": filters_zip[2]}
+
+    def _filters_from_xml(self, xml):
+        for node in xml.iter("FilterDescription"):
+            filt = node.attrib
+            yield (filt["internalName"],
+                   filt.get("type", ""),
+                   filt.get("description", ""))
 
 
