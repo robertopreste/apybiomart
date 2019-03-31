@@ -30,18 +30,14 @@ Async pythonic interface to Biomart.
 Features
 --------
 
-TODO
-====
-
-* single `aquery()` function that takes `attributes`, `filters`, and optional `dataset` and `mart` arguments (should default to one of the available ones)
-    - this `aquery()` function should actually be an async coroutine
-    - so the user should wrap that in an async loop and all the stuff to actually use it
-* ~~another `query()` function that is actually sync, so can be used to load a query at a time~~
-* a set of `list_*()` functions (that may not necessarily be async), that list:
-    - ~~available marts~~
-    - ~~available datasets for a specific mart (should take an optional `mart` argument defaulting to one of the available ones)~~
-    - ~~available attributes for a dataset (same as above, with a dataset)~~
-    - ~~available filters for a dataset (same as above)~~
+* single asynchronous `aquery()` function that takes `attributes`, `filters`, and optional `dataset` argument (`dataset` defaults to `"hsapiens_gene_ensembl"`)
+    - this `aquery()` function needs to be wrapped in an async loop and all the stuff to actually use it
+* synchronous `query()` function that can be used to load a query at a time
+* a set of `list_*()` synchronous functions, that list:
+    - available marts
+    - available datasets for a specific mart (with an optional `mart` argument defaulting to `"ENSEMBL_MART_ENSEMBL"`)
+    - available attributes for a dataset (with an optional `dataset` argument defaulting to `"hsapiens_gene_ensembl"`)
+    - available filters for a dataset (with an optional `dataset` argument defaulting to `"hsapiens_gene_ensembl"`)
 
 Credits
 -------
