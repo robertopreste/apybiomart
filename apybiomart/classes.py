@@ -7,7 +7,7 @@ import io
 import requests
 import pandas as pd
 from xml.etree import ElementTree as ET
-from typing import Optional, Dict, Any, Tuple, Generator
+from typing import Optional, Dict, Any, Tuple, Generator, List
 
 
 class BiomartException(Exception):
@@ -213,7 +213,10 @@ class FiltersServer(Server):
 
 
 class SyncQuery(Server):
-    def __init__(self, attributes, filters, dataset):
+    def __init__(self,
+                 attributes: List[str],
+                 filters: Dict[str, str],
+                 dataset: str):
         super().__init__()
         self.attributes = attributes
         self.filters = filters
@@ -223,6 +226,11 @@ class SyncQuery(Server):
     #     return pd.read_csv(self._create_query(), sep="\t")
 
     def query(self) -> io.StringIO:
+        """
+        Synchronous function that returns the result of the query based
+        on the given attributes, filters and optional dataset.
+        :return: io.StringIO
+        """
         # Setup query element.
         root = ET.Element("Query")
         root.set("virtualSchemaName", "default")
@@ -270,13 +278,26 @@ class SyncQuery(Server):
         return result
 
     @staticmethod
-    def _add_attr_node(root, attr):
+    def _add_attr_node(root, attr: str):
+        """
+        Adds the given attribute name to the dataset ElementTree sub-element.
+        :param root: dataset sub-element root node
+        :param str attr: attribute name
+        :return:
+        """
         attr_el = ET.SubElement(root, "Attribute")
         attr_el.set("name", attr)
 
     @staticmethod
-    def _add_filter_node(root, name, value):
-        """Adds filter xml node to root."""
+    def _add_filter_node(root, name: str, value: str):
+        """
+        Adds the given filter name and value to the dataset ElementTree
+        sub-element.
+        :param root: dataset sub-element root node
+        :param str name: filter name
+        :param str value: filter value
+        :return:
+        """
         filter_el = ET.SubElement(root, "Filter")
         filter_el.set("name", name)
 
@@ -303,13 +324,21 @@ class SyncQuery(Server):
 
 
 class AsyncQuery(Server):
-    def __init__(self, attributes, filters, dataset):
+    def __init__(self,
+                 attributes: List[str],
+                 filters: Dict[str, str],
+                 dataset: str):
         super().__init__()
         self.attributes = attributes
         self.filters = filters
         self.dataset = dataset
 
     async def aquery(self) -> io.StringIO:
+        """
+        Asynchronous coroutine that returns the result of the query based
+        on the given attributes, filters and optional dataset.
+        :return: io.StringIO
+        """
         # Setup query element.
         root = ET.Element("Query")
         root.set("virtualSchemaName", "default")
@@ -358,12 +387,25 @@ class AsyncQuery(Server):
 
     @staticmethod
     def _add_attr_node(root, attr):
+        """
+        Adds the given attribute name to the dataset ElementTree sub-element.
+        :param root: dataset sub-element root node
+        :param str attr: attribute name
+        :return:
+        """
         attr_el = ET.SubElement(root, "Attribute")
         attr_el.set("name", attr)
 
     @staticmethod
     def _add_filter_node(root, name, value):
-        """Adds filter xml node to root."""
+        """
+        Adds the given filter name and value to the dataset ElementTree
+        sub-element.
+        :param root: dataset sub-element root node
+        :param str name: filter name
+        :param str value: filter value
+        :return:
+        """
         filter_el = ET.SubElement(root, "Filter")
         filter_el.set("name", name)
 
