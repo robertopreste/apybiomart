@@ -17,3 +17,11 @@ History
 ==================
 
 * Add basic tests.
+
+
+0.2.0 (2019-03-31)
+------------------
+
+* New version with different organisation of classes and functions;
+* Sync `query` and async `aquery` functions to query Biomart;
+* Sync `list_*` functions to retrieve available `marts`, `datasets`, `filters` and `attributes`.
