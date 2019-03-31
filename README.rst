@@ -34,9 +34,9 @@ TODO
 ====
 
 * single `aquery()` function that takes `attributes`, `filters`, and optional `dataset` and `mart` arguments (should default to one of the available ones)
-    - this `query()` function should actually be an async coroutine
+    - this `aquery()` function should actually be an async coroutine
     - so the user should wrap that in an async loop and all the stuff to actually use it
-* another `query()` function that is actually sync, so can be used to load a query at a time
+* ~~another `query()` function that is actually sync, so can be used to load a query at a time~~
 * a set of `list_*()` functions (that may not necessarily be async), that list:
     - ~~available marts~~
     - ~~available datasets for a specific mart (should take an optional `mart` argument defaulting to one of the available ones)~~
