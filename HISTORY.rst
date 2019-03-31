@@ -25,3 +25,8 @@ History
 * New version with different organisation of classes and functions;
 * Sync `query` and async `aquery` functions to query Biomart;
 * Sync `list_*` functions to retrieve available `marts`, `datasets`, `filters` and `attributes`.
+
+0.2.1 (WIP)
+===========
+
+* Add tests.
