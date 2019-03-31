@@ -200,14 +200,17 @@ class FiltersServer(Server):
                    filt.get("description", ""))
 
 
-class Query(Server):
+class SyncQuery(Server):
     def __init__(self, attributes, filters, dataset):
         super().__init__()
         self.attributes = attributes
         self.filters = filters
         self.dataset = dataset
 
-    def _create_query(self):
+    def query(self):
+        return pd.read_csv(self._create_query(), sep="\t")
+
+    def _create_query(self) -> io.StringIO:
         # Setup query element.
         root = ET.Element("Query")
         root.set("virtualSchemaName", "default")
@@ -244,13 +247,15 @@ class Query(Server):
         if "Query ERROR" in resp.text:
             raise BiomartException(resp.text)
 
-        try:
-            result = pd.read_csv(io.StringIO(resp.text), sep="\t")
-        # Type error is raised of a data type is not understood by pandas
-        except TypeError as err:
-            raise ValueError("Non valid data type is used in dtypes")
+        return io.StringIO(resp.text)
 
-        return result
+        # try:
+        #     result = pd.read_csv(io.StringIO(resp.text), sep="\t")
+        # # Type error is raised of a data type is not understood by pandas
+        # except TypeError as err:
+        #     raise ValueError("Non valid data type is used in dtypes")
+        #
+        # return result
 
     @staticmethod
     def _add_attr_node(root, attr):
