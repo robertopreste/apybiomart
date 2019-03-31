@@ -20,7 +20,7 @@ def df_marts() -> pd.DataFrame:
 
 
 @pytest.fixture
-def df_datasets_ensembl_head() -> pd.DataFrame:
+def df_datasets_ensembl() -> pd.DataFrame:
     """
     Dataframe with available datasets for the default mart
     (ENSEMBL_MART_ENSEMBL).
@@ -29,4 +29,14 @@ def df_datasets_ensembl_head() -> pd.DataFrame:
     df = pd.read_pickle(os.path.join(DATADIR, "list_datasets_ensembl.pkl"))
     return df
 
+
+@pytest.fixture
+def df_datasets_mouse() -> pd.DataFrame:
+    """
+    Dataframe with available datasets for the default mart
+    (ENSEMBL_MART_MOUSE).
+    :return: pd.DataFrame
+    """
+    df = pd.read_pickle(os.path.join(DATADIR, "list_datasets_mouse.pkl"))
+    return df
 
