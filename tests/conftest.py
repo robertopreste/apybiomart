@@ -254,3 +254,41 @@ def df_filters_funcgen_hsapiens_peak() -> pd.DataFrame:
     df = pd.read_pickle(os.path.join(DATADIR,
                                      "filters_hsapiens_peak.pkl"))
     return df
+
+
+# query
+
+@pytest.fixture
+def df_query_ensembl_hsapiens_gene_chrom_1() -> pd.DataFrame:
+    """
+    Dataframe with the expected query result for chromosome 1 of the
+    hsapiens_gene_ensembl dataset.
+    :return: pd.DataFrame
+    """
+    df = pd.read_pickle(os.path.join(DATADIR,
+                                     "query_hsapiens_gene_chrom_1.pkl"))
+    return df
+
+
+@pytest.fixture
+def df_query_ensembl_hsapiens_gene_chrom_2() -> pd.DataFrame:
+    """
+    Dataframe with the expected query result for chromosome 2 of the
+    hsapiens_gene_ensembl dataset.
+    :return: pd.DataFrame
+    """
+    df = pd.read_pickle(os.path.join(DATADIR,
+                                     "query_hsapiens_gene_chrom_2.pkl"))
+    return df
+
+
+@pytest.fixture
+def df_query_ensembl_hsapiens_gene_chrom_3() -> pd.DataFrame:
+    """
+    Dataframe with the expected query result for chromosome 3 of the
+    hsapiens_gene_ensembl dataset.
+    :return: pd.DataFrame
+    """
+    df = pd.read_pickle(os.path.join(DATADIR,
+                                     "query_hsapiens_gene_chrom_3.pkl"))
+    return df
