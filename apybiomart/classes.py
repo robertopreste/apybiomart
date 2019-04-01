@@ -72,7 +72,6 @@ class MartServer(Server):
                 "display_name": marts[1]}
 
     @staticmethod
-    # def _mart_from_xml(xml) -> Generator[str, str]:
     def _mart_from_xml(xml):
         """
         Parse the xml to extract name and display name of each mart.

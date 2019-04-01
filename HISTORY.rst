@@ -35,4 +35,5 @@ History
 ==================
 
 * Basic functions working and tested;
-* Fix documentation.
+* Fix documentation;
+* Update requirements.
