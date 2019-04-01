@@ -58,7 +58,7 @@ jobs:
           name: upload coverage report
           command: |
             . venv/bin/activate
-            codecov -f coverage.xml -t REPLACE_THIS
+            codecov -f coverage.xml -t c009fa45-11d6-4dea-abb8-bd5971918a0f
       - store_artifacts:
           path: test-reports
           destination: test-reports

@@ -6,8 +6,11 @@ apybiomart
 .. image:: https://img.shields.io/pypi/v/apybiomart.svg
         :target: https://pypi.python.org/pypi/apybiomart
 
-.. image:: https://img.shields.io/travis/robertopreste/apybiomart.svg
-        :target: https://travis-ci.com/robertopreste/apybiomart
+.. image:: https://travis-ci.com/robertopreste/apybiomart.svg?branch=master
+    :target: https://travis-ci.com/robertopreste/apybiomart
+
+.. image:: https://codecov.io/gh/robertopreste/apybiomart/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/robertopreste/apybiomart
 
 .. image:: https://readthedocs.org/projects/apybiomart/badge/?version=latest
         :target: https://apybiomart.readthedocs.io/en/latest/?badge=latest
