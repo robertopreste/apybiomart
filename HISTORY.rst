@@ -30,3 +30,9 @@ History
 ==================
 
 * Add tests.
+
+0.2.2 (2019-04-01)
+==================
+
+* Basic functions working and tested;
+* Fix documentation.
