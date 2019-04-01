@@ -20,29 +20,42 @@ apybiomart
 
 
 
-Async pythonic interface to Biomart. 
+Async pythonic interface to BioMart.
 
 
 * Free software: MIT license
 * Documentation: https://apybiomart.readthedocs.io.
+* GitHub repo: https://github.com/robertopreste/apybiomart
 
 
 Features
 --------
 
-* single asynchronous `aquery()` function that takes `attributes`, `filters`, and optional `dataset` argument (`dataset` defaults to `"hsapiens_gene_ensembl"`)
-    - this `aquery()` function needs to be wrapped in an async loop and all the stuff to actually use it
-* synchronous `query()` function that can be used to load a query at a time
-* a set of `list_*()` synchronous functions, that list:
-    - available marts
-    - available datasets for a specific mart (with an optional `mart` argument defaulting to `"ENSEMBL_MART_ENSEMBL"`)
-    - available attributes for a dataset (with an optional `dataset` argument defaulting to `"hsapiens_gene_ensembl"`)
-    - available filters for a dataset (with an optional `dataset` argument defaulting to `"hsapiens_gene_ensembl"`)
+`apybiomart` is a Python module which provides a simple asynchronous interface to Ensembl BioMart_. Users can exploit the async interface to schedule multiple queries using all the commodities offered by Python's `asyncio` library.
+
+Depending on specific needs, `apybiomart` offers different entry points:
+
+* an asynchronous `aquery()` function, to schedule multiple queries in the same event loop;
+* a synchronous `query()` function, which can be used for exploratory queries, executed in real time;
+* a set of synchronous `list_*()` functions, which can be used to retrieve the list of available marts, datasets for a specific mart, attributes and filters for a specific dataset.
+
+
+Background
+==========
+
+`apybiomart` was originally born as a fork of the great pybiomart_ package.
+
+I was working on a project that employed a series of async calls to several online resources, but I couldn't manage to perform asynchronous calls to BioMart using that package, so I decided to modify it to better suit my needs. However, it gradually evolved into a very different thing: the original implementation was rewritten and the structure of the package changed a bit, in a way that I found most useful for my purpose.
+
+This said, all the credits go to jrderuiter_, which created the original `pybiomart` package.
 
 Credits
 -------
 
 This package was created with Cookiecutter_ and the `cc-pypackage`_ project template.
 
+.. _BioMart: https://www.ensembl.org/biomart/martview
+.. _pybiomart: https://github.com/jrderuiter/pybiomart
+.. _jrderuiter: https://github.com/jrderuiter
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`cc-pypackage`: https://github.com/robertopreste/cc-pypackage

@@ -11,8 +11,6 @@ twine==1.13.0
 pytest==4.3.0
 pytest-runner==4.2
 
-asyncio
-aiohttp
-pandas
-pytest-helpers-namespace
-pytest-mock
+asyncio==3.4.3
+aiohttp==3.5.4
+pandas==0.24.2
