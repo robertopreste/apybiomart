@@ -3,7 +3,7 @@
 # Created by Roberto Preste
 import pytest
 from pandas.testing import assert_frame_equal
-from apybiomart import list_marts, list_datasets
+from apybiomart import list_marts, list_datasets, list_attributes
 
 
 def test_list_marts(df_marts):
@@ -134,6 +134,66 @@ def test_list_datasets_funcgen(df_datasets_funcgen):
               .sort_values(by="name", axis=0)
               .reset_index(drop=True))
     result = (list_datasets("ENSEMBL_MART_FUNCGEN")
+              .sort_values(by="name", axis=0)
+              .reset_index(drop=True))
+
+    assert_frame_equal(result, expect)
+
+
+def test_list_attributes_default(df_attributes_ensembl_hsapiens_gene):
+    """
+    Test the available attributes returned by list_attributes for the
+    default dataset (hsapiens_gene_ensembl).
+    """
+    expect = (df_attributes_ensembl_hsapiens_gene
+              .sort_values(by="name", axis=0)
+              .reset_index(drop=True))
+    result = (df_attributes_ensembl_hsapiens_gene
+              .sort_values(by="name", axis=0)
+              .reset_index(drop=True))
+
+    assert_frame_equal(result, expect)
+
+
+def test_list_attributes_ensembl(df_attributes_ensembl_hsapiens_gene):
+    """
+    Test the available attributes returned by list_attributes for the
+    hsapiens_gene_ensembl dataset.
+    """
+    expect = (df_attributes_ensembl_hsapiens_gene
+              .sort_values(by="name", axis=0)
+              .reset_index(drop=True))
+    result = (df_attributes_ensembl_hsapiens_gene
+              .sort_values(by="name", axis=0)
+              .reset_index(drop=True))
+
+    assert_frame_equal(result, expect)
+
+
+def test_list_attributes_mouse(df_attributes_mouse_mlpj_gene):
+    """
+    Test the available attributes returned by list_attributes for the
+    mlpj_gene_ensembl dataset.
+    """
+    expect = (df_attributes_mouse_mlpj_gene
+              .sort_values(by="name", axis=0)
+              .reset_index(drop=True))
+    result = (df_attributes_mouse_mlpj_gene
+              .sort_values(by="name", axis=0)
+              .reset_index(drop=True))
+
+    assert_frame_equal(result, expect)
+
+
+def test_list_attributes_genomic(df_attributes_sequence_cdingo_genomic):
+    """
+    Test the available attributes returned by list_attributes for the
+    cdingo_genomic_sequence dataset.
+    """
+    expect = (df_attributes_sequence_cdingo_genomic
+              .sort_values(by="name", axis=0)
+              .reset_index(drop=True))
+    result = (df_attributes_sequence_cdingo_genomic
               .sort_values(by="name", axis=0)
               .reset_index(drop=True))
 

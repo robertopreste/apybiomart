@@ -129,10 +129,13 @@ class AttributesServer(Server):
         a dataframe.
         :return: pd.DataFrame
         """
-        return pd.DataFrame.from_records(self._fetch_attributes(),
-                                         columns=["name",
-                                                  "display_name",
-                                                  "description"])
+        df = pd.DataFrame.from_records(self._fetch_attributes(),
+                                       columns=["name",
+                                                "display_name",
+                                                "description"])
+        df["dataset"] = self.dataset
+
+        return df
 
     def _fetch_attributes(self) -> Dict[str, Tuple[Any]]:
         """
@@ -177,10 +180,13 @@ class FiltersServer(Server):
         a dataframe.
         :return: pd.DataFrame
         """
-        return pd.DataFrame.from_records(self._fetch_filters(),
-                                         columns=["name",
-                                                  "type",
-                                                  "description"])
+        df = pd.DataFrame.from_records(self._fetch_filters(),
+                                       columns=["name",
+                                                "type",
+                                                "description"])
+        df["dataset"] = self.dataset
+
+        return df
 
     def _fetch_filters(self) -> Dict[str, Tuple[Any]]:
         """
