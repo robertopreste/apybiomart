@@ -9,12 +9,15 @@ apybiomart
 .. image:: https://travis-ci.com/robertopreste/apybiomart.svg?branch=master
     :target: https://travis-ci.com/robertopreste/apybiomart
 
+.. image:: https://circleci.com/gh/robertopreste/apybiomart.svg?style=svg
+    :target: https://circleci.com/gh/robertopreste/apybiomart
+
 .. image:: https://codecov.io/gh/robertopreste/apybiomart/branch/master/graph/badge.svg
-  :target: https://codecov.io/gh/robertopreste/apybiomart
+    :target: https://codecov.io/gh/robertopreste/apybiomart
 
 .. image:: https://readthedocs.org/projects/apybiomart/badge/?version=latest
-        :target: https://apybiomart.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
+    :target: https://apybiomart.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
 
 .. image:: https://pyup.io/repos/github/robertopreste/apybiomart/shield.svg

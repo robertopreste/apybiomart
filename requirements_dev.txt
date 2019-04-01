@@ -4,12 +4,13 @@ wheel==0.33.1
 watchdog==0.9.0
 flake8==3.5.0
 tox==3.7.0
-coverage==4.5.1
+coverage==4.5.3
 Sphinx==1.8.1
 twine==1.13.0
 
 pytest==4.3.0
 pytest-runner==4.2
+pytest-cov==2.6.1
 
 asyncio==3.4.3
 aiohttp==3.5.4
