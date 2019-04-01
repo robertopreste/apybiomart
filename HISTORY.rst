@@ -26,7 +26,7 @@ History
 * Sync `query` and async `aquery` functions to query Biomart;
 * Sync `list_*` functions to retrieve available `marts`, `datasets`, `filters` and `attributes`.
 
-0.2.1 (WIP)
-===========
+0.2.1 (2019-04-01)
+==================
 
 * Add tests.
