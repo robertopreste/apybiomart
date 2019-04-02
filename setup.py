@@ -15,7 +15,7 @@ setup_requirements = ['pytest-runner', ]
 
 test_requirements = ['pytest', ]
 
-setup(
+setup(  # pragma: no cover
     author="Roberto Preste",
     author_email='robertopreste@gmail.com',
     classifiers=[
