@@ -67,7 +67,9 @@ Queries
 -------
 
 Once the desired mart, dataset, attributes and filters have been explored (or if they were known beforehand), it is possible to query BioMart to retrieve the actual data; queries can be performed synchronously or asynchronously.
+
 Exploring the difference between these two approaches is out of the scope of this document, but basically while in synchronous calls the client has to wait for a request to be complete before moving to the next one, in asynchronous calls the client can perform another request while the first one is idle, and so on until all the requests have been performed and a response was returned.
+
 Simply put, apybiomart allows to perform synchronous queries to explore the data, and asynchronous queries to group multiple queries and run them efficiently.
 
 Synchronous Queries
