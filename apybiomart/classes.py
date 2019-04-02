@@ -7,7 +7,7 @@ import io
 import requests
 import pandas as pd
 from xml.etree import ElementTree as ET
-from typing import Optional, Dict, Any, Tuple, Generator, List
+from typing import Optional, Dict, Any, Tuple, Generator, List, Union
 
 
 class BiomartException(Exception):
@@ -217,18 +217,15 @@ class FiltersServer(Server):
                    filt.get("description", ""))
 
 
-class SyncQuery(Server):
+class Query(Server):
     def __init__(self,
                  attributes: List[str],
-                 filters: Dict[str, str],
+                 filters: Dict[str, Union[str, List]],
                  dataset: str):
         super().__init__()
         self.attributes = attributes
         self.filters = filters
         self.dataset = dataset
-
-    # def query(self):
-    #     return pd.read_csv(self._create_query(), sep="\t")
 
     def query(self) -> io.StringIO:
         """
@@ -281,62 +278,6 @@ class SyncQuery(Server):
             raise ValueError("Non valid data type is used in dtypes")
 
         return result
-
-    @staticmethod
-    def _add_attr_node(root, attr: str):
-        """
-        Adds the given attribute name to the dataset ElementTree sub-element.
-        :param root: dataset sub-element root node
-        :param str attr: attribute name
-        :return:
-        """
-        attr_el = ET.SubElement(root, "Attribute")
-        attr_el.set("name", attr)
-
-    @staticmethod
-    def _add_filter_node(root, name: str, value: str):
-        """
-        Adds the given filter name and value to the dataset ElementTree
-        sub-element.
-        :param root: dataset sub-element root node
-        :param str name: filter name
-        :param str value: filter value
-        :return:
-        """
-        filter_el = ET.SubElement(root, "Filter")
-        filter_el.set("name", name)
-
-        # TODO
-        # Set filter value depending on type.
-        if isinstance(value, list) or isinstance(value, tuple):
-            # List case.
-            filter_el.set("value", ",".join(map(str, value)))
-        # if name.type == "boolean":
-            # Boolean case.
-        elif value is True or value.lower() in {"included", "only"}:
-            filter_el.set("excluded", "0")
-        elif value is False or value.lower() == "excluded":
-            filter_el.set("excluded", "1")
-        # else:
-        #     raise ValueError("Invalid value for boolean filter ({})"
-        #                      .format(value))
-        elif isinstance(value, list) or isinstance(value, tuple):
-            # List case.
-            filter_el.set("value", ",".join(map(str, value)))
-        else:
-            # Default case.
-            filter_el.set("value", str(value))
-
-
-class AsyncQuery(Server):
-    def __init__(self,
-                 attributes: List[str],
-                 filters: Dict[str, str],
-                 dataset: str):
-        super().__init__()
-        self.attributes = attributes
-        self.filters = filters
-        self.dataset = dataset
 
     async def aquery(self) -> io.StringIO:
         """
@@ -391,7 +332,7 @@ class AsyncQuery(Server):
         return result
 
     @staticmethod
-    def _add_attr_node(root, attr):
+    def _add_attr_node(root, attr: str):
         """
         Adds the given attribute name to the dataset ElementTree sub-element.
         :param root: dataset sub-element root node
@@ -402,7 +343,7 @@ class AsyncQuery(Server):
         attr_el.set("name", attr)
 
     @staticmethod
-    def _add_filter_node(root, name, value):
+    def _add_filter_node(root, name: str, value: str):
         """
         Adds the given filter name and value to the dataset ElementTree
         sub-element.
@@ -420,7 +361,7 @@ class AsyncQuery(Server):
             # List case.
             filter_el.set("value", ",".join(map(str, value)))
         # if name.type == "boolean":
-            # Boolean case.
+        # Boolean case.
         elif value is True or value.lower() in {"included", "only"}:
             filter_el.set("excluded", "0")
         elif value is False or value.lower() == "excluded":

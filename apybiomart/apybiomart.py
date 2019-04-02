@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Union
 from .classes import MartServer, DatasetServer, AttributesServer, \
-    FiltersServer, SyncQuery, AsyncQuery
+    FiltersServer, Query
 
 
 def list_marts():
@@ -27,14 +27,14 @@ def list_filters(dataset: Optional[str] = "hsapiens_gene_ensembl"):
 
 
 def query(attributes: List[str],
-          filters: Dict[str, str],
+          filters: Dict[str, Union[str, List]],
           dataset: Optional[str] = "hsapiens_gene_ensembl"):
-    server = SyncQuery(attributes, filters, dataset)
+    server = Query(attributes, filters, dataset)
     return server.query()
 
 
 async def aquery(attributes: List[str],
-                 filters: Dict[str, str],
+                 filters: Dict[str, Union[str, List]],
                  dataset: Optional[str] = "hsapiens_gene_ensembl"):
-    server = AsyncQuery(attributes, filters, dataset)
+    server = Query(attributes, filters, dataset)
     return await server.aquery()
