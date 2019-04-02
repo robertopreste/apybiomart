@@ -4,11 +4,11 @@ apybiomart
 
 
 .. image:: https://img.shields.io/pypi/v/apybiomart.svg
-        :target: https://pypi.python.org/pypi/apybiomart
+    :target: https://pypi.python.org/pypi/apybiomart
 
 .. image:: https://www.repostatus.org/badges/latest/wip.svg
-        :alt: Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.
-        :target: https://www.repostatus.org/#wip
+    :alt: Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.
+    :target: https://www.repostatus.org/#wip
 
 .. image:: https://travis-ci.com/robertopreste/apybiomart.svg?branch=master
     :target: https://travis-ci.com/robertopreste/apybiomart
@@ -24,13 +24,16 @@ apybiomart
     :alt: Documentation Status
 
 .. image:: https://pyup.io/repos/github/robertopreste/apybiomart/shield.svg
-     :target: https://pyup.io/repos/github/robertopreste/apybiomart/
-     :alt: Updates
+    :target: https://pyup.io/repos/github/robertopreste/apybiomart/
+    :alt: Updates
 
 .. image:: https://pyup.io/repos/github/robertopreste/apybiomart/python-3-shield.svg
-     :target: https://pyup.io/repos/github/robertopreste/apybiomart/
-     :alt: Python 3
+    :target: https://pyup.io/repos/github/robertopreste/apybiomart/
+    :alt: Python 3
 
+.. image:: https://pepy.tech/badge/apybiomart
+    :target: https://pepy.tech/project/apybiomart
+    :alt: Downloads
 
 
 Async pythonic interface to BioMart.
