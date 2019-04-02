@@ -6,6 +6,10 @@ apybiomart
 .. image:: https://img.shields.io/pypi/v/apybiomart.svg
         :target: https://pypi.python.org/pypi/apybiomart
 
+.. image:: https://www.repostatus.org/badges/latest/wip.svg
+        :alt: Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.
+        :target: https://www.repostatus.org/#wip
+
 .. image:: https://travis-ci.com/robertopreste/apybiomart.svg?branch=master
     :target: https://travis-ci.com/robertopreste/apybiomart
 
@@ -18,7 +22,6 @@ apybiomart
 .. image:: https://readthedocs.org/projects/apybiomart/badge/?version=latest
     :target: https://apybiomart.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
-
 
 .. image:: https://pyup.io/repos/github/robertopreste/apybiomart/shield.svg
      :target: https://pyup.io/repos/github/robertopreste/apybiomart/
@@ -41,9 +44,9 @@ Async pythonic interface to BioMart.
 Features
 --------
 
-``apybiomart`` is a Python module which provides a simple asynchronous interface to Ensembl BioMart_. Users can exploit the async interface to schedule multiple queries using all the commodities offered by Python's ``asyncio`` library.
+apybiomart is a Python module which provides a simple asynchronous interface to Ensembl BioMart_. Users can exploit the async interface to schedule multiple queries using all the commodities offered by Python's asyncio library.
 
-Depending on specific needs, ``apybiomart`` offers different entry points:
+Depending on specific needs, apybiomart offers different entry points:
 
 * an asynchronous ``aquery()`` function, to schedule multiple queries in the same event loop;
 * a synchronous ``query()`` function, which can be used for exploratory queries, executed in real time;
@@ -54,16 +57,16 @@ Please refer to the Usage_ section of the documentation for further information.
 Background
 ==========
 
-``apybiomart`` was originally born as a fork of the great pybiomart_ package.
+apybiomart was originally born as a fork of the great pybiomart_ package.
 
 I was working on a project that employed a series of async calls to several online resources, but I couldn't manage to perform asynchronous calls to BioMart using that package, so I decided to modify it to better suit my needs. However, it gradually evolved into a very different thing: the original implementation was rewritten and the structure of the package changed a bit, in a way that I found most useful for my purpose.
 
-This said, all the credits go to jrderuiter_, which created the original ``pybiomart`` package.
+This said, all the credits go to jrderuiter_, which created the original pybiomart_ package.
 
 Installation
 ------------
 
-**``apybiomart`` only supports Python 3**, and can be installed using ``pip``::
+**apybiomart only supports Python 3**, and can be installed using pip::
 
     pip install apybiomart
 

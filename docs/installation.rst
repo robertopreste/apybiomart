@@ -2,18 +2,18 @@
 Installation
 ============
 
-**PLEASE NOTE: ``apybiomart`` only supports Python 3!**
+**PLEASE NOTE: apybiomart only supports Python 3!**
 
 Stable release
 --------------
 
-To install ``apybiomart``, run this command in your terminal:
+To install apybiomart, run this command in your terminal:
 
 .. code-block:: console
 
     $ pip install apybiomart
 
-This is the preferred method to install ``apybiomart``, as it will always install the most recent stable release.
+This is the preferred method to install apybiomart, as it will always install the most recent stable release.
 
 If you don't have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
@@ -25,7 +25,7 @@ you through the process.
 From sources
 ------------
 
-The sources for ``apybiomart`` can be downloaded from the `Github repo`_.
+The sources for apybiomart can be downloaded from the `Github repo`_.
 
 You can either clone the public repository:
 

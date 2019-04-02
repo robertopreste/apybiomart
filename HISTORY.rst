@@ -37,3 +37,11 @@ History
 * Basic functions working and tested;
 * Fix documentation;
 * Update requirements.
+
+0.2.3 (2019-04-02)
+==================
+
+* Update requirements;
+* Fix type hints for query functions;
+* Reorganise query classes into a single class;
+* Update documentation.

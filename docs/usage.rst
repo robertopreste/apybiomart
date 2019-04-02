@@ -2,7 +2,7 @@
 Usage
 =====
 
-``apybiomart`` can be used in a project with a simple import::
+apybiomart can be used in a project with a simple import::
 
     import apybiomart
     # or use an alias for simplicity
@@ -33,17 +33,21 @@ Datasets
 Available datasets for a specific mart can be retrieved using the ``list_datasets()`` function::
 
     from apybiomart import list_datasets
-    list_datasets("ENSEMBL_MART_ENSEMBL")
+    list_datasets(mart="ENSEMBL_MART_ENSEMBL")
+    # same as above, using the default mart
+    list_datasets()
 
-The ``list_datasets()`` function accepts an optional ``mart`` argument, which defaults to ``"ENSEMBL_MART_ENSEMBL"``. The returned dataframe contains all the available datasets in the given mart, with their ``name``, ``display_name`` and the ``mart`` to which they belong.
+The ``list_datasets()`` function accepts an optional ``mart`` argument, which defaults to "ENSEMBL_MART_ENSEMBL". The returned dataframe contains all the available datasets in the given mart, with their ``name``, ``display_name`` and the ``mart`` to which they belong.
 
 Attributes
 ==========
 
-When querying a dataset, users may want to retrieve specific attributes; the ``list_attributes()`` function accepts an optional ``dataset`` (defaulting to ``"hsapiens_gene_ensembl"``) and gathers all the available attributes for the given dataset::
+When querying a dataset, users may want to retrieve specific attributes; the ``list_attributes()`` function accepts an optional ``dataset`` (defaulting to "hsapiens_gene_ensembl") and gathers all the available attributes for the given dataset::
 
     from apybiomart import list_attributes
-    list_attributes("hsapiens_gene_ensembl")
+    list_attributes(dataset="hsapiens_gene_ensembl")
+    # same as above, using the default dataset
+    list_attributes()
 
 The dataframe returned contains each attribute's ``name``, ``display_name``, ``description`` (where available), and the ``dataset`` to which it belongs.
 
@@ -54,20 +58,22 @@ Datasets can be queried using filters that restrict the returned information to 
 
     from apybiomart import list_filters
     list_filters("hsapiens_gene_ensembl")
+    # same as above, using the default dataset
+    list_filters()
 
-This function accepts an optional ``dataset`` argument, which defaults to ``"hsapiens_gene_ensembl"``, and returns a dataframe with the ``name``, ``type``, ``description`` (where available) of each filter, as well as the ``dataset`` to which it belongs.
+This function accepts an optional ``dataset`` argument, which defaults to "hsapiens_gene_ensembl", and returns a dataframe with the ``name``, ``type``, ``description`` (where available) of each filter, as well as the ``dataset`` to which it belongs.
 
 Queries
 -------
 
 Once the desired mart, dataset, attributes and filters have been explored (or if they were known beforehand), it is possible to query BioMart to retrieve the actual data; queries can be performed synchronously or asynchronously.
 Exploring the difference between these two approaches is out of the scope of this document, but basically while in synchronous calls the client has to wait for a request to be complete before moving to the next one, in asynchronous calls the client can perform another request while the first one is idle, and so on until all the requests have been performed and a response was returned.
-Simply put, ``apybiomart`` allows to perform synchronous queries to explore the data, and asynchronous queries to group multiple queries and run them efficiently.
+Simply put, apybiomart allows to perform synchronous queries to explore the data, and asynchronous queries to group multiple queries and run them efficiently.
 
 Synchronous Queries
 ===================
 
-Synchronous queries can be performed using the ``query()`` function, which accepts ``attributes`` and ``filters`` arguments, and an optional ``dataset`` argument (which defaults to ``"hsapiens_gene_ensembl"``::
+Synchronous queries can be performed using the ``query()`` function, which accepts ``attributes`` and ``filters`` arguments, and an optional ``dataset`` argument (which defaults to "hsapiens_gene_ensembl")::
 
     from apybiomart import query
     query(attributes=["ensembl_gene_id", "external_gene_name"],
@@ -84,9 +90,11 @@ Asynchronous queries can be performed using the ``aquery()`` function, which wor
     import asyncio
     from apybiomart import aquery
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(aquery(attributes=["ensembl_gene_id", "external_gene_name"],
-                                   filters={"chromosome_name": "1"},
-                                   dataset="hsapiens_gene_ensembl"))
+    loop.run_until_complete(
+        aquery(attributes=["ensembl_gene_id", "external_gene_name"],
+               filters={"chromosome_name": "1"},
+               dataset="hsapiens_gene_ensembl")
+    )
 
 This allows to group multiple queries together, and the event loop will take care of scheduling them for execution::
 
