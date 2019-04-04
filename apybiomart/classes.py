@@ -253,7 +253,8 @@ class FiltersServer(Server):
 
 class Query(Server):
     """
-    Class used to perform either synchronous or asynchronous queries on BioMart.
+    Class used to perform either synchronous or asynchronous queries on
+    BioMart.
     """
 
     def __init__(self,

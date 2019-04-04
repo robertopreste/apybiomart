@@ -16,7 +16,8 @@ def list_marts() -> pd.DataFrame:
     return server.list_marts()
 
 
-def list_datasets(mart: Optional[str] = "ENSEMBL_MART_ENSEMBL") -> pd.DataFrame:
+def list_datasets(mart: Optional[str] = "ENSEMBL_MART_ENSEMBL") \
+        -> pd.DataFrame:
     """
     Retrieve and list available datasets for a given mart.
     :param Optional[str] mart: BioMart mart name
