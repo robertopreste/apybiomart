@@ -45,3 +45,10 @@ History
 * Fix type hints for query functions;
 * Reorganise query classes into a single class;
 * Update documentation.
+
+0.2.4 (2019-04-04)
+==================
+
+* Fix type hints;
+* Fix docstrings in classes;
+* Add docstrings to main entry points.
