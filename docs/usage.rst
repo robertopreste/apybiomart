@@ -105,7 +105,7 @@ This allows to group multiple queries together, and the event loop will take car
     loop = asyncio.get_event_loop()
     tasks = [aquery(attributes=["ensembl_gene_id", "external_gene_name"],
                     filters={"chromosome_name": str(i)},
-                    dataset="hsapiens_gene_ensembl) for i in range(3)]
+                    dataset="hsapiens_gene_ensembl") for i in range(3)]
     loop.run_until_complete(asyncio.gather(*tasks))
 
 It is of course possible to assign the query results to one or more specific variables, for future usage::
