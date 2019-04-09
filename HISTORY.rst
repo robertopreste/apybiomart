@@ -52,3 +52,9 @@ History
 * Fix type hints;
 * Fix docstrings in classes;
 * Add docstrings to main entry points.
+
+0.2.5 (2019-04-09)
+==================
+
+* Fix test files with new BioMart versions;
+* Add script to create test files automatically.
