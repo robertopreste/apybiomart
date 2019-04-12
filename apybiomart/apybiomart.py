@@ -16,11 +16,11 @@ def list_marts() -> pd.DataFrame:
     return server.list_marts()
 
 
-def list_datasets(mart: Optional[str] = "ENSEMBL_MART_ENSEMBL") \
+def list_datasets(mart: str = "ENSEMBL_MART_ENSEMBL") \
         -> pd.DataFrame:
     """
     Retrieve and list available datasets for a given mart.
-    :param Optional[str] mart: BioMart mart name
+    :param str mart: BioMart mart name
     (default: "ENSEMBL_MART_ENSEMBL")
     :return: pd.DataFrame
     """
@@ -28,11 +28,11 @@ def list_datasets(mart: Optional[str] = "ENSEMBL_MART_ENSEMBL") \
     return server.list_datasets()
 
 
-def list_attributes(dataset: Optional[str] = "hsapiens_gene_ensembl") \
+def list_attributes(dataset: str = "hsapiens_gene_ensembl") \
         -> pd.DataFrame:
     """
     Retrieve and list available attributes for a given mart.
-    :param Optional[str] dataset: BioMart dataset name
+    :param str dataset: BioMart dataset name
     (default: "hsapiens_gene_ensembl")
     :return: pd.DataFrame
     """
@@ -40,11 +40,11 @@ def list_attributes(dataset: Optional[str] = "hsapiens_gene_ensembl") \
     return server.list_attributes()
 
 
-def list_filters(dataset: Optional[str] = "hsapiens_gene_ensembl") \
+def list_filters(dataset: str = "hsapiens_gene_ensembl") \
         -> pd.DataFrame:
     """
     Retrieve and list available filters for a given mart.
-    :param Optional[str] dataset: BioMart dataset name
+    :param str dataset: BioMart dataset name
     (default: "hsapiens_gene_ensembl")
     :return: pd.DataFrame
     """
@@ -54,13 +54,13 @@ def list_filters(dataset: Optional[str] = "hsapiens_gene_ensembl") \
 
 def query(attributes: List[str],
           filters: Dict[str, Union[str, List]],
-          dataset: Optional[str] = "hsapiens_gene_ensembl") -> pd.DataFrame:
+          dataset: str = "hsapiens_gene_ensembl") -> pd.DataFrame:
     """
     Launch synchronous query using the given attributes, filters and dataset.
     :param List[str] attributes: list of attributes to include
     :param Dict[str, Union[str, List]] filters: dict of filter name : value
     to filter results
-    :param Optional[str] dataset: BioMart dataset name
+    :param str dataset: BioMart dataset name
     (default: "hsapiens_gene_ensembl")
     :return: pd.DataFrame
     """
@@ -70,14 +70,14 @@ def query(attributes: List[str],
 
 async def aquery(attributes: List[str],
                  filters: Dict[str, Union[str, List]],
-                 dataset: Optional[str] = "hsapiens_gene_ensembl") \
+                 dataset: str = "hsapiens_gene_ensembl") \
         -> pd.DataFrame:
     """
     Launch asynchronous query using the given attributes, filters and dataset.
     :param List[str] attributes: list of attributes to include
     :param Dict[str, Union[str, List]] filters: dict of filter name : value
     to filter results
-    :param Optional[str] dataset: BioMart dataset name
+    :param str dataset: BioMart dataset name
     (default: "hsapiens_gene_ensembl")
     :return: pd.DataFrame
     """

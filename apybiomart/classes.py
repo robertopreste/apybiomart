@@ -25,10 +25,10 @@ class Server:
         self.host = host
 
     def get_sync(self,
-                 **params: Optional[Dict[str, Any]]):
+                 **params: Optional[str]):
         """
         Syncronous call to BioMart.
-        :param Optional[Dict[str, Any]] params: keyword arguments for the
+        :param Optional[str] params: keyword arguments for the
         requests call
         :return:
         """
@@ -37,10 +37,10 @@ class Server:
         return resp
 
     async def get_async(self,
-                        **params: Optional[Dict[str, Any]]):
+                        **params: Optional[str]):
         """
         Asyncronous call to BioMart.
-        :param Optional[Dict[str, Any]] params: keyword arguments for the
+        :param Optional[str] params: keyword arguments for the
         async call
         :return:
         """
