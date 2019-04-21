@@ -74,11 +74,15 @@ async def aquery(attributes: List[str],
         -> pd.DataFrame:
     """
     Launch asynchronous query using the given attributes, filters and dataset.
+
     :param List[str] attributes: list of attributes to include
+
     :param Dict[str, Union[str, List]] filters: dict of filter name : value
     to filter results
+
     :param str dataset: BioMart dataset name
     (default: "hsapiens_gene_ensembl")
+
     :return: pd.DataFrame
     """
     server = Query(attributes, filters, dataset)
