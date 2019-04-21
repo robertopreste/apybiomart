@@ -10,6 +10,7 @@ apybiomart is a Python module which provides a simple asynchronous interface to 
    readme
    installation
    usage
+   api
    modules
    contributing
    authors
