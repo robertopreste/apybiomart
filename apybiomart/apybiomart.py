@@ -10,6 +10,7 @@ from .classes import MartServer, DatasetServer, AttributesServer, \
 def list_marts() -> pd.DataFrame:
     """
     Retrieve and list available marts.
+
     :return: pd.DataFrame
     """
     server = MartServer()
@@ -20,8 +21,10 @@ def list_datasets(mart: str = "ENSEMBL_MART_ENSEMBL") \
         -> pd.DataFrame:
     """
     Retrieve and list available datasets for a given mart.
+
     :param str mart: BioMart mart name
-    (default: "ENSEMBL_MART_ENSEMBL")
+        (default: "ENSEMBL_MART_ENSEMBL")
+
     :return: pd.DataFrame
     """
     server = DatasetServer(mart)
@@ -32,8 +35,10 @@ def list_attributes(dataset: str = "hsapiens_gene_ensembl") \
         -> pd.DataFrame:
     """
     Retrieve and list available attributes for a given mart.
+
     :param str dataset: BioMart dataset name
-    (default: "hsapiens_gene_ensembl")
+        (default: "hsapiens_gene_ensembl")
+
     :return: pd.DataFrame
     """
     server = AttributesServer(dataset)
@@ -44,8 +49,10 @@ def list_filters(dataset: str = "hsapiens_gene_ensembl") \
         -> pd.DataFrame:
     """
     Retrieve and list available filters for a given mart.
+
     :param str dataset: BioMart dataset name
-    (default: "hsapiens_gene_ensembl")
+        (default: "hsapiens_gene_ensembl")
+
     :return: pd.DataFrame
     """
     server = FiltersServer(dataset)
@@ -57,11 +64,15 @@ def query(attributes: List[str],
           dataset: str = "hsapiens_gene_ensembl") -> pd.DataFrame:
     """
     Launch synchronous query using the given attributes, filters and dataset.
+
     :param List[str] attributes: list of attributes to include
+
     :param Dict[str, Union[str, List]] filters: dict of filter name : value
-    to filter results
+        to filter results
+
     :param str dataset: BioMart dataset name
-    (default: "hsapiens_gene_ensembl")
+        (default: "hsapiens_gene_ensembl")
+
     :return: pd.DataFrame
     """
     server = Query(attributes, filters, dataset)

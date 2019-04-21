@@ -2,5 +2,5 @@
 API
 ===
 
-.. automodule:: apybiomart.apybiomart
+.. automodule:: apybiomart
     :members:
