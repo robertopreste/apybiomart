@@ -99,6 +99,10 @@ def create_queries():
                     filters={"chromosome_name": "3"},
                     dataset="hsapiens_gene_ensembl")
     df3.to_pickle(os.path.join(DATADIR, "query_hsapiens_gene_chrom_3.pkl"))
+    df4 = apy.query(attributes=["ensembl_gene_id", "external_gene_name"],
+                    filters={"chromosome_name": "1"},
+                    dataset="maj_gene_ensembl")
+    df4.to_pickle(os.path.join(DATADIR, "query_maj_gene_chrom_1.pkl"))
     return
 
 
