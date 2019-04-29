@@ -58,3 +58,9 @@ History
 
 * Fix test files with new BioMart versions;
 * Add script to create test files automatically.
+
+0.2.6 (2019-04-29)
+==================
+
+* Update test files;
+* Fix and update documentation.

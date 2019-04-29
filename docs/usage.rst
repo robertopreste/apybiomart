@@ -5,8 +5,6 @@ Usage
 apybiomart can be used in a project with a simple import::
 
     import apybiomart
-    # or use an alias for simplicity
-    import apybiomart as apy
 
 The main purpose of the package is to perform queries on BioMart (either synchronously or asynchronously), however users may first need to explore the available marts, datasets, attributes and filters.
 
@@ -25,7 +23,16 @@ In order to view the marts available on BioMart, the ``list_marts()`` function c
     from apybiomart import list_marts
     list_marts()
 
-A dataframe with the available marts is returned, with their proper ``name`` and ``display_name``.
+A dataframe with the available marts is returned, with their proper ``name`` and ``display_name``::
+
+                        name           display_name
+    0   ENSEMBL_MART_ENSEMBL       Ensembl Genes 96
+    1     ENSEMBL_MART_MOUSE       Mouse strains 96
+    2  ENSEMBL_MART_SEQUENCE               Sequence
+    3  ENSEMBL_MART_ONTOLOGY               Ontology
+    4   ENSEMBL_MART_GENOMIC    Genomic features 96
+    5       ENSEMBL_MART_SNP   Ensembl Variation 96
+    6   ENSEMBL_MART_FUNCGEN  Ensembl Regulation 96
 
 Datasets
 ========
@@ -37,7 +44,16 @@ Available datasets for a specific mart can be retrieved using the ``list_dataset
     # same as above, using the default mart
     list_datasets()
 
-The ``list_datasets()`` function accepts an optional ``mart`` argument, which defaults to "ENSEMBL_MART_ENSEMBL". The returned dataframe contains all the available datasets in the given mart, with their ``name``, ``display_name`` and the ``mart`` to which they belong.
+The ``list_datasets()`` function accepts an optional ``mart`` argument, which defaults to "ENSEMBL_MART_ENSEMBL". The returned dataframe contains all the available datasets in the given mart, with their ``name``, ``display_name`` and the ``mart`` to which they belong::
+
+                               name                                       display_name                  mart
+    0       rroxellana_gene_ensembl           Golden snub-nosed monkey genes (Rrox_v1)  ENSEMBL_MART_ENSEMBL
+    1          ggallus_gene_ensembl                             Chicken genes (GRCg6a)  ENSEMBL_MART_ENSEMBL
+    2    dmelanogaster_gene_ensembl           Drosophila melanogaster genes (BDGP6.22)  ENSEMBL_MART_ENSEMBL
+    ..                          ...                                                ...                   ...
+    181      sdorsalis_gene_ensembl                Yellowtail amberjack genes (Sedor1)  ENSEMBL_MART_ENSEMBL
+    182           ohni_gene_ensembl            Japanese medaka HNI genes (ASM223471v1)  ENSEMBL_MART_ENSEMBL
+    183       pmarinus_gene_ensembl                       Lamprey genes (Pmarinus_7.0)  ENSEMBL_MART_ENSEMBL
 
 Attributes
 ==========
@@ -49,7 +65,16 @@ When querying a dataset, users may want to retrieve specific attributes; the ``l
     # same as above, using the default dataset
     list_attributes()
 
-The dataframe returned contains each attribute's ``name``, ``display_name``, ``description`` (where available), and the ``dataset`` to which it belongs.
+The dataframe returned contains each attribute's ``name``, ``display_name``, ``description`` (where available), and the ``dataset`` to which it belongs::
+
+                          name            display_name                       description                dataset
+    0          ensembl_gene_id          Gene stable ID             Stable ID of the Gene  hsapiens_gene_ensembl
+    1  ensembl_gene_id_version  Gene stable ID version  Versionned stable ID of the Gene  hsapiens_gene_ensembl
+    2    ensembl_transcript_id    Transcript stable ID       Stable ID of the Transcript  hsapiens_gene_ensembl
+    ..                     ...                     ...                               ...                    ...
+    3348            cds_length              CDS Length                                    hsapiens_gene_ensembl
+    3349             cds_start               CDS start                                    hsapiens_gene_ensembl
+    3350               cds_end                 CDS end                                    hsapiens_gene_ensembl
 
 Filters
 =======
@@ -61,7 +86,16 @@ Datasets can be queried using filters that restrict the returned information to 
     # same as above, using the default dataset
     list_filters()
 
-This function accepts an optional ``dataset`` argument, which defaults to "hsapiens_gene_ensembl", and returns a dataframe with the ``name``, ``type``, ``description`` (where available) of each filter, as well as the ``dataset`` to which it belongs.
+This function accepts an optional ``dataset`` argument, which defaults to "hsapiens_gene_ensembl", and returns a dataframe with the ``name``, ``type``, ``description`` (where available) of each filter, as well as the ``dataset`` to which it belongs::
+
+                                    name  type description                dataset
+    0               link_so_mini_closure  list              hsapiens_gene_ensembl
+    1                    link_go_closure  text              hsapiens_gene_ensembl
+    2  link_ensembl_transcript_stable_id  text              hsapiens_gene_ensembl
+    ..                               ...   ...         ...                    ...
+    39        germ_line_variation_source  list              hsapiens_gene_ensembl
+    40          somatic_variation_source  list              hsapiens_gene_ensembl
+    42               so_consequence_name  list              hsapiens_gene_ensembl
 
 Queries
 -------
