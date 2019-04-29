@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
 import pandas as pd
-from typing import Optional, List, Dict, Union
+from typing import List, Dict, Union
 from .classes import MartServer, DatasetServer, AttributesServer, \
     FiltersServer, Query
 
@@ -67,7 +67,7 @@ def query(attributes: List[str],
 
     :param List[str] attributes: list of attributes to include
 
-    :param Dict[str, Union[str, List]] filters: dict of filter name : value
+    :param Dict[str,Union[str, List]] filters: dict of filter name : value
         to filter results
 
     :param str dataset: BioMart dataset name
@@ -88,7 +88,7 @@ async def aquery(attributes: List[str],
 
     :param List[str] attributes: list of attributes to include
 
-    :param Dict[str, Union[str, List]] filters: dict of filter name : value
+    :param Dict[str,Union[str, List]] filters: dict of filter name : value
         to filter results
 
     :param str dataset: BioMart dataset name

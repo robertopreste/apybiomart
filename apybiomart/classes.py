@@ -28,8 +28,10 @@ class Server:
                  **params: Optional[str]):
         """
         Syncronous call to BioMart.
+
         :param Optional[str] params: keyword arguments for the
-        requests call
+            requests call
+
         :return:
         """
         resp = requests.get(self.host, params=params)
@@ -40,8 +42,10 @@ class Server:
                         **params: Optional[str]):
         """
         Asyncronous call to BioMart.
+
         :param Optional[str] params: keyword arguments for the
-        async call
+            async call
+
         :return:
         """
         async with aiohttp.ClientSession() as session:
@@ -60,6 +64,7 @@ class MartServer(Server):
     def list_marts(self) -> pd.DataFrame:
         """
         Return the list of available marts as a dataframe.
+
         :return: pd.DataFrame
         """
         return pd.DataFrame.from_records(self._fetch_marts(),
@@ -72,7 +77,8 @@ class MartServer(Server):
 
         Call BioMart to retrieve the available marts and return the
         internal dict used to parse them by self.list_marts().
-        :return: Dict[str, Tuple[Any]]
+
+        :return: Dict[str,Tuple[Any]]
         """
         resp = self.get_sync(type="registry")
         xml = ET.fromstring(resp.content)
@@ -87,8 +93,10 @@ class MartServer(Server):
         Extract mart information from XML.
 
         Parse the xml to extract name and display name of each mart.
+
         :param xml: ElementTree retrieved from Biomart
-        :return: Generator[str, str]
+
+        :return: Generator[str,str]
         """
         for child in xml.findall("MartURLLocation"):
             yield (child.attrib["name"],
@@ -108,6 +116,7 @@ class DatasetServer(Server):
         """
         Return the list of available datasets for a specific mart as a
         dataframe.
+
         :return: pd.DataFrame
         """
         df = pd.read_csv(self._fetch_datasets(),
@@ -128,6 +137,7 @@ class DatasetServer(Server):
         Call BioMart to retrieve the available datasets for a specific
         mart and return the internal string used to parse them by
         self.list_datasets().
+
         :return: io.StringIO
         """
         resp = self.get_sync(type="datasets", mart=self.mart)
@@ -148,6 +158,7 @@ class AttributesServer(Server):
         """
         Return the list of available attributes for a specific dataset as
         a dataframe.
+
         :return: pd.DataFrame
         """
         df = pd.DataFrame.from_records(self._fetch_attributes(),
@@ -165,7 +176,8 @@ class AttributesServer(Server):
         Call BioMart to retrieve the available attributes for a specific
         dataset and return the internal dict used to parse them by
         self.list_attributes().
-        :return: Dict[str, Tuple[Any]]
+
+        :return: Dict[str,Tuple[Any]]
         """
         resp = self.get_sync(type="configuration", dataset=self.dataset)
         xml = ET.fromstring(resp.content)
@@ -182,8 +194,10 @@ class AttributesServer(Server):
 
         Parse the xml to extract name, display name and description
         of each attribute.
+
         :param xml: ElementTree retrieved from Biomart
-        :return: Generator[str, Any, Any]
+
+        :return: Generator[str,Any,Any]
         """
         for page in xml.iter("AttributePage"):
             for desc in page.iter("AttributeDescription"):
@@ -207,6 +221,7 @@ class FiltersServer(Server):
         """
         Return the list of available filters for a specific dataset as
         a dataframe.
+
         :return: pd.DataFrame
         """
         df = pd.DataFrame.from_records(self._fetch_filters(),
@@ -224,7 +239,8 @@ class FiltersServer(Server):
         Call BioMart to retrieve the available filters for a specific
         dataset and return the internal dict used to parse them by
         self.list_filters().
-        :return: Dict[str, Tuple[Any]]
+
+        :return: Dict[str,Tuple[Any]]
         """
         resp = self.get_sync(type="configuration", dataset=self.dataset)
         xml = ET.fromstring(resp.content)
@@ -241,8 +257,10 @@ class FiltersServer(Server):
 
         Parse the xml to extract name, type and description of each
         filter.
+
         :param xml: ElementTree retrieved from Biomart
-        :return: Generator[str, Any, Any]
+
+        :return: Generator[str,Any,Any]
         """
         for node in xml.iter("FilterDescription"):
             filt = node.attrib
@@ -272,6 +290,7 @@ class Query(Server):
 
         Return the result of the query based on the given attributes,
         filters and optional dataset using Server.get_sync().
+
         :return: pd.DataFrame
         """
         # Setup query element.
@@ -323,6 +342,7 @@ class Query(Server):
 
         Return the result of the query based on the given attributes,
         filters and optional dataset using Server.get_async().
+
         :return: pd.DataFrame
         """
         # Setup query element.
@@ -372,8 +392,11 @@ class Query(Server):
     def _add_attr_node(root, attr: str):
         """
         Add the given attribute name to the dataset ElementTree sub-element.
+
         :param root: dataset sub-element root node
+
         :param str attr: attribute name
+
         :return:
         """
         attr_el = ET.SubElement(root, "Attribute")
@@ -384,9 +407,13 @@ class Query(Server):
         """
         Add the given filter name and value to the dataset ElementTree
         sub-element.
+
         :param root: dataset sub-element root node
+
         :param str name: filter name
+
         :param str value: filter value
+
         :return:
         """
         filter_el = ET.SubElement(root, "Filter")
