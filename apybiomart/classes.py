@@ -10,12 +10,12 @@ from xml.etree import ElementTree as ET
 from typing import Optional, Dict, Any, Tuple, Generator, List, Union
 
 
-class BiomartException(Exception):
+class _BiomartException(Exception):
     """Basic exception class for biomart exceptions."""
     pass
 
 
-class Server:
+class _Server:
     """
     Basic server class used to call BioMart using sync or async calls.
     """
@@ -53,7 +53,7 @@ class Server:
                 return await resp.text()
 
 
-class MartServer(Server):
+class MartServer(_Server):
     """
     Class used to retrieve and list available marts.
     """
@@ -61,7 +61,7 @@ class MartServer(Server):
     def __init__(self):
         super().__init__()
 
-    def list_marts(self) -> pd.DataFrame:
+    def find_marts(self) -> pd.DataFrame:
         """
         Return the list of available marts as a dataframe.
 
@@ -103,16 +103,18 @@ class MartServer(Server):
                    child.attrib["displayName"])
 
 
-class DatasetServer(Server):
+class DatasetServer(_Server):
     """
     Class used to retrieve and list available datasets for a mart.
+
+    :param str mart: BioMart mart name
     """
 
     def __init__(self, mart: str):
         super().__init__()
         self.mart = mart
 
-    def list_datasets(self) -> pd.DataFrame:
+    def find_datasets(self) -> pd.DataFrame:
         """
         Return the list of available datasets for a specific mart as a
         dataframe.
@@ -145,16 +147,18 @@ class DatasetServer(Server):
         return io.StringIO(resp.text)
 
 
-class AttributesServer(Server):
+class AttributesServer(_Server):
     """
     Class used to retrieve and list available attributes for a dataset.
+
+    :param str dataset: BioMart dataset name
     """
 
     def __init__(self, dataset: str):
         super().__init__()
         self.dataset = dataset
 
-    def list_attributes(self) -> pd.DataFrame:
+    def find_attributes(self) -> pd.DataFrame:
         """
         Return the list of available attributes for a specific dataset as
         a dataframe.
@@ -208,16 +212,18 @@ class AttributesServer(Server):
                        attrib.get("description", ""))
 
 
-class FiltersServer(Server):
+class FiltersServer(_Server):
     """
     Class used to retrieve and list available filters for a dataset.
+
+    :param str dataset: BioMart dataset name
     """
 
     def __init__(self, dataset: str):
         super().__init__()
         self.dataset = dataset
 
-    def list_filters(self) -> pd.DataFrame:
+    def find_filters(self) -> pd.DataFrame:
         """
         Return the list of available filters for a specific dataset as
         a dataframe.
@@ -269,10 +275,17 @@ class FiltersServer(Server):
                    filt.get("description", ""))
 
 
-class Query(Server):
+class Query(_Server):
     """
     Class used to perform either synchronous or asynchronous queries on
     BioMart.
+
+    :param List[str] attributes: list of attributes to include
+
+    :param Dict[str,Union[str,List]] filters: dict of filter name : value
+        to filter results
+
+    :param str dataset: BioMart dataset name
     """
 
     def __init__(self,
@@ -309,7 +322,7 @@ class Query(Server):
             try:
                 self._add_attr_node(dataset, name)
             except KeyError:
-                raise BiomartException(
+                raise _BiomartException(
                     "Unknown attribute {}, check dataset attributes "
                     "for a list of valid attributes.".format(name))
 
@@ -319,14 +332,14 @@ class Query(Server):
                 try:
                     self._add_filter_node(dataset, name, value)
                 except KeyError:
-                    raise BiomartException(
+                    raise _BiomartException(
                         "Unknown filter {}, check dataset filters "
                         "for a list of valid filters.".format(name))
 
         resp = self.get_sync(query=str(ET.tostring(root), "utf-8"))
 
         if "Query ERROR" in resp.text:
-            raise BiomartException(resp.text)
+            raise _BiomartException(resp.text)
 
         try:
             result = pd.read_csv(io.StringIO(resp.text), sep="\t")
@@ -361,7 +374,7 @@ class Query(Server):
             try:
                 self._add_attr_node(dataset, name)
             except KeyError:
-                raise BiomartException(
+                raise _BiomartException(
                     "Unknown attribute {}, check dataset attributes "
                     "for a list of valid attributes.".format(name))
 
@@ -371,14 +384,14 @@ class Query(Server):
                 try:
                     self._add_filter_node(dataset, name, value)
                 except KeyError:
-                    raise BiomartException(
+                    raise _BiomartException(
                         "Unknown filter {}, check dataset filters "
                         "for a list of valid filters.".format(name))
 
         resp = await self.get_async(query=str(ET.tostring(root), "utf-8"))
 
         if "Query ERROR" in resp:
-            raise BiomartException(resp)
+            raise _BiomartException(resp)
 
         try:
             result = pd.read_csv(io.StringIO(resp), sep="\t")
@@ -424,18 +437,11 @@ class Query(Server):
         if isinstance(value, list) or isinstance(value, tuple):
             # List case.
             filter_el.set("value", ",".join(map(str, value)))
-        # if name.type == "boolean":
         # Boolean case.
         elif value is True or value.lower() in {"included", "only"}:
             filter_el.set("excluded", "0")
         elif value is False or value.lower() == "excluded":
             filter_el.set("excluded", "1")
-        # else:
-        #     raise ValueError("Invalid value for boolean filter ({})"
-        #                      .format(value))
-        elif isinstance(value, list) or isinstance(value, tuple):
-            # List case.
-            filter_el.set("value", ",".join(map(str, value)))
         else:
             # Default case.
             filter_el.set("value", str(value))

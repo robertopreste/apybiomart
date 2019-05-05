@@ -7,18 +7,17 @@ from .classes import MartServer, DatasetServer, AttributesServer, \
     FiltersServer, Query
 
 
-def list_marts() -> pd.DataFrame:
+def find_marts() -> pd.DataFrame:
     """
     Retrieve and list available marts.
 
     :return: pd.DataFrame
     """
     server = MartServer()
-    return server.list_marts()
+    return server.find_marts()
 
 
-def list_datasets(mart: str = "ENSEMBL_MART_ENSEMBL") \
-        -> pd.DataFrame:
+def find_datasets(mart: str = "ENSEMBL_MART_ENSEMBL") -> pd.DataFrame:
     """
     Retrieve and list available datasets for a given mart.
 
@@ -28,11 +27,10 @@ def list_datasets(mart: str = "ENSEMBL_MART_ENSEMBL") \
     :return: pd.DataFrame
     """
     server = DatasetServer(mart)
-    return server.list_datasets()
+    return server.find_datasets()
 
 
-def list_attributes(dataset: str = "hsapiens_gene_ensembl") \
-        -> pd.DataFrame:
+def find_attributes(dataset: str = "hsapiens_gene_ensembl") -> pd.DataFrame:
     """
     Retrieve and list available attributes for a given mart.
 
@@ -42,11 +40,10 @@ def list_attributes(dataset: str = "hsapiens_gene_ensembl") \
     :return: pd.DataFrame
     """
     server = AttributesServer(dataset)
-    return server.list_attributes()
+    return server.find_attributes()
 
 
-def list_filters(dataset: str = "hsapiens_gene_ensembl") \
-        -> pd.DataFrame:
+def find_filters(dataset: str = "hsapiens_gene_ensembl") -> pd.DataFrame:
     """
     Retrieve and list available filters for a given mart.
 
@@ -56,7 +53,7 @@ def list_filters(dataset: str = "hsapiens_gene_ensembl") \
     :return: pd.DataFrame
     """
     server = FiltersServer(dataset)
-    return server.list_filters()
+    return server.find_filters()
 
 
 def query(attributes: List[str],
@@ -67,7 +64,7 @@ def query(attributes: List[str],
 
     :param List[str] attributes: list of attributes to include
 
-    :param Dict[str,Union[str, List]] filters: dict of filter name : value
+    :param Dict[str,Union[str,List]] filters: dict of filter name : value
         to filter results
 
     :param str dataset: BioMart dataset name
@@ -81,14 +78,13 @@ def query(attributes: List[str],
 
 async def aquery(attributes: List[str],
                  filters: Dict[str, Union[str, List]],
-                 dataset: str = "hsapiens_gene_ensembl") \
-        -> pd.DataFrame:
+                 dataset: str = "hsapiens_gene_ensembl") -> pd.DataFrame:
     """
     Launch asynchronous query using the given attributes, filters and dataset.
 
     :param List[str] attributes: list of attributes to include
 
-    :param Dict[str,Union[str, List]] filters: dict of filter name : value
+    :param Dict[str,Union[str,List]] filters: dict of filter name : value
         to filter results
 
     :param str dataset: BioMart dataset name
