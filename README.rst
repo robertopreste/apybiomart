@@ -40,7 +40,7 @@ Async pythonic interface to BioMart.
 
 
 * Free software: MIT license
-* Documentation: https://apybiomart.readthedocs.io.
+* Documentation: https://apybiomart.readthedocs.io
 * GitHub repo: https://github.com/robertopreste/apybiomart
 
 
@@ -53,7 +53,7 @@ Depending on specific needs, apybiomart offers different entry points:
 
 * an asynchronous ``aquery()`` function, to schedule multiple queries in the same event loop;
 * a synchronous ``query()`` function, which can be used for exploratory queries, executed in real time;
-* a set of synchronous ``list_*()`` functions, which can be used to retrieve the list of available marts, datasets for a specific mart, attributes and filters for a specific dataset.
+* a set of synchronous ``find_*()`` functions, which can be used to retrieve the list of available marts, datasets for a specific mart, attributes and filters for a specific dataset.
 
 Please refer to the Usage_ section of the documentation for further information.
 

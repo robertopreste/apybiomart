@@ -18,10 +18,10 @@ For more information, please refer to BioMart's help_ page.
 Marts
 =====
 
-In order to view the marts available on BioMart, the ``list_marts()`` function can be used::
+In order to view the marts available on BioMart, the ``find_marts()`` function can be used::
 
-    from apybiomart import list_marts
-    list_marts()
+    from apybiomart import find_marts
+    find_marts()
 
 A dataframe with the available marts is returned, with their proper ``name`` and ``display_name``::
 
@@ -37,14 +37,14 @@ A dataframe with the available marts is returned, with their proper ``name`` and
 Datasets
 ========
 
-Available datasets for a specific mart can be retrieved using the ``list_datasets()`` function::
+Available datasets for a specific mart can be retrieved using the ``find_datasets()`` function::
 
-    from apybiomart import list_datasets
-    list_datasets(mart="ENSEMBL_MART_ENSEMBL")
+    from apybiomart import find_datasets
+    find_datasets(mart="ENSEMBL_MART_ENSEMBL")
     # same as above, using the default mart
-    list_datasets()
+    find_datasets()
 
-The ``list_datasets()`` function accepts an optional ``mart`` argument, which defaults to "ENSEMBL_MART_ENSEMBL". The returned dataframe contains all the available datasets in the given mart, with their ``name``, ``display_name`` and the ``mart`` to which they belong::
+The ``find_datasets()`` function accepts an optional ``mart`` argument, which defaults to "ENSEMBL_MART_ENSEMBL". The returned dataframe contains all the available datasets in the given mart, with their ``name``, ``display_name`` and the ``mart`` to which they belong::
 
                                name                                       display_name                  mart
     0       rroxellana_gene_ensembl           Golden snub-nosed monkey genes (Rrox_v1)  ENSEMBL_MART_ENSEMBL
@@ -58,12 +58,12 @@ The ``list_datasets()`` function accepts an optional ``mart`` argument, which de
 Attributes
 ==========
 
-When querying a dataset, users may want to retrieve specific attributes; the ``list_attributes()`` function accepts an optional ``dataset`` (defaulting to "hsapiens_gene_ensembl") and gathers all the available attributes for the given dataset::
+When querying a dataset, users may want to retrieve specific attributes; the ``find_attributes()`` function accepts an optional ``dataset`` (defaulting to "hsapiens_gene_ensembl") and gathers all the available attributes for the given dataset::
 
-    from apybiomart import list_attributes
-    list_attributes(dataset="hsapiens_gene_ensembl")
+    from apybiomart import find_attributes
+    find_attributes(dataset="hsapiens_gene_ensembl")
     # same as above, using the default dataset
-    list_attributes()
+    find_attributes()
 
 The dataframe returned contains each attribute's ``name``, ``display_name``, ``description`` (where available), and the ``dataset`` to which it belongs::
 
@@ -79,12 +79,12 @@ The dataframe returned contains each attribute's ``name``, ``display_name``, ``d
 Filters
 =======
 
-Datasets can be queried using filters that restrict the returned information to some specific subset of interest (e.g. chromosome, start position, etc.). In order to retrieve the list of filters available for a given dataset, the ``list_filters()`` function can be used::
+Datasets can be queried using filters that restrict the returned information to some specific subset of interest (e.g. chromosome, start position, etc.). In order to retrieve the list of filters available for a given dataset, the ``find_filters()`` function can be used::
 
-    from apybiomart import list_filters
-    list_filters("hsapiens_gene_ensembl")
+    from apybiomart import find_filters
+    find_filters("hsapiens_gene_ensembl")
     # same as above, using the default dataset
-    list_filters()
+    find_filters()
 
 This function accepts an optional ``dataset`` argument, which defaults to "hsapiens_gene_ensembl", and returns a dataframe with the ``name``, ``type``, ``description`` (where available) of each filter, as well as the ``dataset`` to which it belongs::
 

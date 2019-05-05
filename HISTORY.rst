@@ -64,3 +64,10 @@ History
 
 * Update test files;
 * Fix and update documentation.
+
+
+0.3.0 (2019-05-05)
+------------------
+
+* Change ``list_*`` functions names to ``find_*`` for better compliance;
+* Update documentation.
