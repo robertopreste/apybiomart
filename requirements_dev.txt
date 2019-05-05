@@ -10,7 +10,7 @@ twine==1.13.0
 
 pytest==4.4.1
 pytest-runner==4.4
-pytest-cov==2.6.1
+pytest-cov==2.7.1
 
 asyncio==3.4.3
 aiohttp==3.5.4
