@@ -23,6 +23,24 @@ class _Server:
     def __init__(self,
                  host: str = "http://www.ensembl.org/biomart/martservice"):
         self.host = host
+        if not self._check_connection():
+            raise _BiomartException("No internet connection available!")
+
+    @staticmethod
+    def _check_connection() -> bool:
+        """
+        Check for a functioning internet connection.
+
+        :return: bool
+        """
+        url = "https://httpstat.us/200"
+        timeout = 5
+        try:
+            _ = requests.get(url, timeout=timeout)
+            return True
+        except requests.exceptions.RequestException as e:
+            pass
+        return False
 
     def get_sync(self,
                  **params: Optional[str]):
