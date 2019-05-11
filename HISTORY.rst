@@ -71,3 +71,10 @@ History
 
 * Change ``list_*`` functions names to ``find_*`` for better compliance;
 * Update documentation.
+
+0.3.1 (2019-05-11)
+==================
+
+* Fix requirements handling;
+* Add function to check internet connection.
+
