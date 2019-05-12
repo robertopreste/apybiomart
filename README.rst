@@ -12,12 +12,19 @@ apybiomart
 
 .. image:: https://travis-ci.com/robertopreste/apybiomart.svg?branch=master
     :target: https://travis-ci.com/robertopreste/apybiomart
+    :alt: Travis CI build status
 
 .. image:: https://circleci.com/gh/robertopreste/apybiomart.svg?style=svg
     :target: https://circleci.com/gh/robertopreste/apybiomart
+    :alt: CircleCI build status
+
+.. image:: https://ci.appveyor.com/api/projects/status/40xnw7ww187taoif?svg=true
+    :target: https://ci.appveyor.com/project/robertopreste/apybiomart
+    :alt: AppVeyor build status
 
 .. image:: https://codecov.io/gh/robertopreste/apybiomart/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/robertopreste/apybiomart
+    :alt: Codecov status
 
 .. image:: https://readthedocs.org/projects/apybiomart/badge/?version=latest
     :target: https://apybiomart.readthedocs.io/en/latest/?badge=latest
@@ -34,6 +41,9 @@ apybiomart
 .. image:: https://pepy.tech/badge/apybiomart
     :target: https://pepy.tech/project/apybiomart
     :alt: Downloads
+
+.. image:: https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg
+   :target: https://saythanks.io/to/robertopreste
 
 
 Async pythonic interface to BioMart.
