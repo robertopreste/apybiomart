@@ -231,3 +231,8 @@ pyvenv.cfg
 .venv
 pip-selfcheck.json
 
+.idea/apybiomart.iml
+rtdocs/
+tests/article.ipynb
+tests/benchmark.ipynb
+tests/prova.py
