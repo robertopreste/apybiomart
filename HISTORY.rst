@@ -78,3 +78,8 @@ History
 * Fix requirements handling;
 * Add function to check internet connection.
 
+0.3.2 (2019-05-29)
+==================
+
+* Correct minor typos;
+* Update documentation and testfiles.

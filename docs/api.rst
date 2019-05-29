@@ -14,7 +14,7 @@ These functions are available after you ``import apybiomart`` and should be used
 Internal classes
 ----------------
 
-These are the internal classes used by apybiomart. Use them if you want more control over the application.
+These are the internal classes used by apybiomart, and can be imported with ``from apybiomart.classes import <ClassName>``. Use them if you want more control over the application.
 
 .. automodule:: apybiomart.classes
     :members:
