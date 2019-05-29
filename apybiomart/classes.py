@@ -11,7 +11,7 @@ from typing import Optional, Dict, Any, Tuple, Generator, List, Union
 
 
 class _BiomartException(Exception):
-    """Basic exception class for biomart exceptions."""
+    """Basic exception class for BioMart exceptions."""
     pass
 
 
@@ -45,7 +45,7 @@ class _Server:
     def get_sync(self,
                  **params: Optional[str]):
         """
-        Syncronous call to BioMart.
+        Synchronous call to BioMart.
 
         :param Optional[str] params: keyword arguments for the
             requests call
@@ -59,7 +59,7 @@ class _Server:
     async def get_async(self,
                         **params: Optional[str]):
         """
-        Asyncronous call to BioMart.
+        Asynchronous call to BioMart.
 
         :param Optional[str] params: keyword arguments for the
             async call
@@ -143,7 +143,7 @@ class DatasetServer(_Server):
                          sep="\t",
                          # TODO: look for proper names in Biomart documentation
                          names=["type", "name", "display_name", "unknown",
-                                "unknown2", "unknown3", "unknown4",
+                                "version", "unknown3", "unknown4",
                                 "virtual_schema", "unknown5"],
                          usecols=["name", "display_name"])
         df["mart"] = self.mart
