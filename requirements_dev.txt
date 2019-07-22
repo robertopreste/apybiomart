@@ -14,4 +14,4 @@ pytest-cov==2.7.1
 
 asyncio==3.4.3
 aiohttp==3.5.4
-pandas==0.24.2
+pandas==0.25.0
