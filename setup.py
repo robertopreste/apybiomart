@@ -9,7 +9,8 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ["asyncio>=3.4", "aiohttp>=3.5", "pandas>=0.24"]
+requirements = ["requests==2.21.0", "asyncio>=3.4", "aiohttp>=3.5",
+                "pandas==0.24.2"]
 
 setup_requirements = ["pytest-runner", ]
 
