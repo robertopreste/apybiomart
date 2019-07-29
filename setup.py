@@ -9,7 +9,8 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ["asyncio>=3.4", "aiohttp>=3.5", "pandas>=0.24"]
+requirements = ["requests==2.21.0", "asyncio>=3.4", "aiohttp>=3.5",
+                "pandas==0.24.2"]
 
 setup_requirements = ["pytest-runner", ]
 
@@ -42,6 +43,6 @@ setup(  # pragma: no cover
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/robertopreste/apybiomart',
-    version='0.3.2',
+    version='0.3.3',
     zip_safe=False,
 )

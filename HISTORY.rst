@@ -83,3 +83,8 @@ History
 
 * Correct minor typos;
 * Update documentation and testfiles.
+
+0.3.3 (2019-07-29)
+==================
+
+* Fix #37 - issue with the requests module not installed.

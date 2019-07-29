@@ -6,4 +6,4 @@ from apybiomart.apybiomart import find_marts, find_datasets, find_attributes, \
 
 __author__ = """Roberto Preste"""
 __email__ = 'robertopreste@gmail.com'
-__version__ = '0.3.2'
+__version__ = '0.3.3'
