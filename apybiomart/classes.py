@@ -16,8 +16,10 @@ class _BiomartException(Exception):
 
 
 class _Server:
-    """
-    Basic server class used to call BioMart using sync or async calls.
+    """Basic server class used to call BioMart using sync or async calls.
+
+    Attributes:
+        host: URL to connect to
     """
 
     def __init__(self,
@@ -28,10 +30,10 @@ class _Server:
 
     @staticmethod
     def _check_connection() -> bool:
-        """
-        Check for a functioning internet connection.
+        """Check for a functioning internet connection.
 
-        :return: bool
+        Returns:
+            bool
         """
         url = "https://httpstat.us/200"
         timeout = 5
@@ -44,13 +46,13 @@ class _Server:
 
     def get_sync(self,
                  **params: Optional[str]):
-        """
-        Synchronous call to BioMart.
+        """Synchronous call to BioMart.
 
-        :param Optional[str] params: keyword arguments for the
-            requests call
+        Keyword Args:
+            params: keyword arguments for the requests call
 
-        :return:
+        Returns:
+            request call to self.host with given params
         """
         resp = requests.get(self.host, params=params)
 
@@ -58,13 +60,13 @@ class _Server:
 
     async def get_async(self,
                         **params: Optional[str]):
-        """
-        Asynchronous call to BioMart.
+        """Asynchronous call to BioMart.
 
-        :param Optional[str] params: keyword arguments for the
-            async call
+        Keyword Args:
+            params: keyword arguments for the async call
 
-        :return:
+        Returns:
+            asynchronous call to self.host with given params
         """
         async with aiohttp.ClientSession() as session:
             async with session.get(self.host, params=params) as resp:
@@ -72,31 +74,29 @@ class _Server:
 
 
 class MartServer(_Server):
-    """
-    Class used to retrieve and list available marts.
-    """
+    """Class used to retrieve and list available marts."""
 
     def __init__(self):
         super().__init__()
 
     def find_marts(self) -> pd.DataFrame:
-        """
-        Return the list of available marts as a dataframe.
+        """Return the list of available marts as a dataframe.
 
-        :return: pd.DataFrame
+        Returns
+            pd.DataFrame
         """
         return pd.DataFrame.from_records(self._fetch_marts(),
                                          columns=["name",
                                                   "display_name"])
-    
+
     def _fetch_marts(self) -> Dict[str, Tuple[Any]]:
-        """
-        Retrieve the available marts from BioMart.
+        """Retrieve the available marts from BioMart.
 
         Call BioMart to retrieve the available marts and return the
         internal dict used to parse them by self.list_marts().
 
-        :return: Dict[str,Tuple[Any]]
+        Returns:
+            dictionary from parsed xml
         """
         resp = self.get_sync(type="registry")
         xml = ET.fromstring(resp.content)
@@ -107,14 +107,15 @@ class MartServer(_Server):
 
     @staticmethod
     def _mart_from_xml(xml):
-        """
-        Extract mart information from XML.
+        """Extract mart information from XML.
 
         Parse the xml to extract name and display name of each mart.
 
-        :param xml: ElementTree retrieved from Biomart
+        Args:
+            xml: ElementTree retrieved from Biomart
 
-        :return: Generator[str,str]
+        Returns:
+            generator for each node in the xml
         """
         for child in xml.findall("MartURLLocation"):
             yield (child.attrib["name"],
@@ -122,10 +123,10 @@ class MartServer(_Server):
 
 
 class DatasetServer(_Server):
-    """
-    Class used to retrieve and list available datasets for a mart.
+    """Class used to retrieve and list available datasets for a mart.
 
-    :param str mart: BioMart mart name
+    Attributes:
+        mart: BioMart mart name
     """
 
     def __init__(self, mart: str):
@@ -133,12 +134,8 @@ class DatasetServer(_Server):
         self.mart = mart
 
     def find_datasets(self) -> pd.DataFrame:
-        """
-        Return the list of available datasets for a specific mart as a
-        dataframe.
-
-        :return: pd.DataFrame
-        """
+        """Return the list of available datasets for a specific mart as a
+        dataframe."""
         df = pd.read_csv(self._fetch_datasets(),
                          sep="\t",
                          # TODO: look for proper names in Biomart documentation
@@ -151,25 +148,25 @@ class DatasetServer(_Server):
         return df
 
     def _fetch_datasets(self) -> io.StringIO:
-        """
-        Retrieve available datasets for a mart.
+        """Retrieve available datasets for a mart.
 
         Call BioMart to retrieve the available datasets for a specific
         mart and return the internal string used to parse them by
         self.list_datasets().
 
-        :return: io.StringIO
+        Returns:
+            io.StringIO element from response text
         """
         resp = self.get_sync(type="datasets", mart=self.mart)
-        
+
         return io.StringIO(resp.text)
 
 
 class AttributesServer(_Server):
-    """
-    Class used to retrieve and list available attributes for a dataset.
+    """Class used to retrieve and list available attributes for a dataset.
 
-    :param str dataset: BioMart dataset name
+    Attributes:
+        dataset: BioMart dataset name
     """
 
     def __init__(self, dataset: str):
@@ -177,12 +174,8 @@ class AttributesServer(_Server):
         self.dataset = dataset
 
     def find_attributes(self) -> pd.DataFrame:
-        """
-        Return the list of available attributes for a specific dataset as
-        a dataframe.
-
-        :return: pd.DataFrame
-        """
+        """Return the list of available attributes for a specific dataset as
+        a dataframe."""
         df = pd.DataFrame.from_records(self._fetch_attributes(),
                                        columns=["name",
                                                 "display_name",
@@ -192,14 +185,14 @@ class AttributesServer(_Server):
         return df
 
     def _fetch_attributes(self) -> Dict[str, Tuple[Any]]:
-        """
-        Retrieve available attributes for a dataset.
+        """Retrieve available attributes for a dataset.
 
         Call BioMart to retrieve the available attributes for a specific
         dataset and return the internal dict used to parse them by
         self.list_attributes().
 
-        :return: Dict[str,Tuple[Any]]
+        Returns:
+            dictionary from parsed xml
         """
         resp = self.get_sync(type="configuration", dataset=self.dataset)
         xml = ET.fromstring(resp.content)
@@ -211,15 +204,16 @@ class AttributesServer(_Server):
 
     @staticmethod
     def _attributes_from_xml(xml) -> Generator[str, Any, Any]:
-        """
-        Extract attributes information from XML.
+        """Extract attributes information from XML.
 
         Parse the xml to extract name, display name and description
         of each attribute.
 
-        :param xml: ElementTree retrieved from Biomart
+        Args:
+            xml: ElementTree retrieved from Biomart
 
-        :return: Generator[str,Any,Any]
+        Returns:
+            generator for each node in the xml
         """
         for page in xml.iter("AttributePage"):
             for desc in page.iter("AttributeDescription"):
@@ -231,10 +225,10 @@ class AttributesServer(_Server):
 
 
 class FiltersServer(_Server):
-    """
-    Class used to retrieve and list available filters for a dataset.
+    """Class used to retrieve and list available filters for a dataset.
 
-    :param str dataset: BioMart dataset name
+    Attributes:
+        dataset: BioMart dataset name
     """
 
     def __init__(self, dataset: str):
@@ -242,12 +236,8 @@ class FiltersServer(_Server):
         self.dataset = dataset
 
     def find_filters(self) -> pd.DataFrame:
-        """
-        Return the list of available filters for a specific dataset as
-        a dataframe.
-
-        :return: pd.DataFrame
-        """
+        """Return the list of available filters for a specific dataset as
+        a dataframe."""
         df = pd.DataFrame.from_records(self._fetch_filters(),
                                        columns=["name",
                                                 "type",
@@ -257,14 +247,14 @@ class FiltersServer(_Server):
         return df
 
     def _fetch_filters(self) -> Dict[str, Tuple[Any]]:
-        """
-        Retrieve available filters for a dataset.
+        """Retrieve available filters for a dataset.
 
         Call BioMart to retrieve the available filters for a specific
         dataset and return the internal dict used to parse them by
         self.list_filters().
 
-        :return: Dict[str,Tuple[Any]]
+        Returns:
+            dictionary from parsed xml
         """
         resp = self.get_sync(type="configuration", dataset=self.dataset)
         xml = ET.fromstring(resp.content)
@@ -276,15 +266,16 @@ class FiltersServer(_Server):
 
     @staticmethod
     def _filters_from_xml(xml) -> Generator[str, Any, Any]:
-        """
-        Extract filters information from XML.
+        """Extract filters information from XML.
 
         Parse the xml to extract name, type and description of each
         filter.
 
-        :param xml: ElementTree retrieved from Biomart
+        Args:
+            xml: ElementTree retrieved from Biomart
 
-        :return: Generator[str,Any,Any]
+        Returns:
+            generator for each node in the xml
         """
         for node in xml.iter("FilterDescription"):
             filt = node.attrib
@@ -294,21 +285,18 @@ class FiltersServer(_Server):
 
 
 class Query(_Server):
-    """
-    Class used to perform either synchronous or asynchronous queries on
+    """Class used to perform either synchronous or asynchronous queries on
     BioMart.
 
-    :param List[str] attributes: list of attributes to include
-
-    :param Dict[str,Union[str,List]] filters: dict of filter name : value
-        to filter results
-
-    :param str dataset: BioMart dataset name
+    Attributes:
+        attributes: list of attributes to include
+        filters: dict of filter name : value to filter results
+        dataset: BioMart dataset name
     """
 
     def __init__(self,
                  attributes: List[str],
-                 filters: Dict[str, Union[str, List]],
+                 filters: Dict[str, Union[str, int, list, tuple, bool]],
                  dataset: str):
         super().__init__()
         self.attributes = attributes
@@ -316,13 +304,11 @@ class Query(_Server):
         self.dataset = dataset
 
     def query(self) -> pd.DataFrame:
-        """
-        Perform synchronous query.
+        """Perform synchronous query.
 
         Return the result of the query based on the given attributes,
-        filters and optional dataset using Server.get_sync().
-
-        :return: pd.DataFrame
+        filters and optional dataset using Server.get_sync(), as a pandas
+        DataFrame.
         """
         # Setup query element.
         root = ET.Element("Query")
@@ -368,13 +354,11 @@ class Query(_Server):
         return result
 
     async def aquery(self) -> pd.DataFrame:
-        """
-        Perform asynchronous query.
+        """Perform asynchronous query.
 
         Return the result of the query based on the given attributes,
-        filters and optional dataset using Server.get_async().
-
-        :return: pd.DataFrame
+        filters and optional dataset using Server.get_async(), as a pandas
+        DataFrame.
         """
         # Setup query element.
         root = ET.Element("Query")
@@ -421,45 +405,49 @@ class Query(_Server):
 
     @staticmethod
     def _add_attr_node(root, attr: str):
-        """
-        Add the given attribute name to the dataset ElementTree sub-element.
+        """Add the given attribute name to the dataset ElementTree sub-element.
 
-        :param root: dataset sub-element root node
-
-        :param str attr: attribute name
-
-        :return:
+        Args:
+            root: dataset sub-element root node
+            attr: attribute name
         """
         attr_el = ET.SubElement(root, "Attribute")
         attr_el.set("name", attr)
 
     @staticmethod
-    def _add_filter_node(root, name: str, value: str):
-        """
-        Add the given filter name and value to the dataset ElementTree
+    def _add_filter_node(root,
+                         name: str,
+                         value: Union[str, int, list, tuple, bool]):
+        """Add the given filter name and value to the dataset ElementTree
         sub-element.
 
-        :param root: dataset sub-element root node
-
-        :param str name: filter name
-
-        :param str value: filter value
-
-        :return:
+        Args:
+            root: dataset sub-element root node
+            name: filter name
+            value: filter value
         """
         filter_el = ET.SubElement(root, "Filter")
         filter_el.set("name", name)
 
         # TODO
         # Set filter value depending on type.
-        if isinstance(value, list) or isinstance(value, tuple):
-            # List case.
+        # Boolean case
+        if isinstance(value, bool):
+            if value is True:
+                filter_el.set("excluded", "0")
+            else:
+                filter_el.set("excluded", "1")
+        # List case
+        elif isinstance(value, list) or isinstance(value, tuple):
             filter_el.set("value", ",".join(map(str, value)))
-        # Boolean case.
-        elif value is True or value.lower() in {"included", "only"}:
-            filter_el.set("excluded", "0")
-        elif value is False or value.lower() == "excluded":
-            filter_el.set("excluded", "1")
+        # String case
+        elif isinstance(value, str):
+            if value.lower() in ("included", "only"):
+                filter_el.set("excluded", "0")
+            elif value.lower() == "excluded":
+                filter_el.set("excluded", "1")
+            else:
+                filter_el.set("value", value)
+        # Mostly int case
         else:
-            # Default case.
             filter_el.set("value", str(value))
