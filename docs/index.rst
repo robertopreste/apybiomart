@@ -1,7 +1,9 @@
-Welcome to apybiomart's documentation!
-======================================
+.. include:: ../README.rst
 
-apybiomart is a Python module which provides a simple asynchronous interface to Ensembl BioMart_. Users can exploit the async interface to schedule multiple queries using all the commodities offered by Python's asyncio library.
+____
+
+Table Of Contents
+=================
 
 .. toctree::
    :maxdepth: 2
@@ -11,7 +13,6 @@ apybiomart is a Python module which provides a simple asynchronous interface to 
    installation
    usage
    api
-   modules
    contributing
    authors
    history

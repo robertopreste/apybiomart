@@ -9,14 +9,14 @@ apybiomart can be used in a project with a simple import::
 The main purpose of the package is to perform queries on BioMart (either synchronously or asynchronously), however users may first need to explore the available marts, datasets, attributes and filters.
 
 Marts, datasets, attributes and filters
----------------------------------------
+=======================================
 
 BioMart contains different databases, called *marts*, each of which in turn contains several *datasets*, each related to a specific species. These datasets can be queried and it is possible to restrict the amount of data returned to one or more particular types of information, namely *attributes*, and using *filters* that only retain data satisfying one or more specific criteria.
 
 For more information, please refer to BioMart's help_ page.
 
 Marts
-=====
+-----
 
 In order to view the marts available on BioMart, the ``find_marts()`` function can be used::
 
@@ -35,7 +35,7 @@ A dataframe with the available marts is returned, with their proper ``name`` and
     6   ENSEMBL_MART_FUNCGEN  Ensembl Regulation 96
 
 Datasets
-========
+--------
 
 Available datasets for a specific mart can be retrieved using the ``find_datasets()`` function::
 
@@ -56,7 +56,7 @@ The ``find_datasets()`` function accepts an optional ``mart`` argument, which de
     183       pmarinus_gene_ensembl                       Lamprey genes (Pmarinus_7.0)  ENSEMBL_MART_ENSEMBL
 
 Attributes
-==========
+----------
 
 When querying a dataset, users may want to retrieve specific attributes; the ``find_attributes()`` function accepts an optional ``dataset`` (defaulting to "hsapiens_gene_ensembl") and gathers all the available attributes for the given dataset::
 
@@ -77,7 +77,7 @@ The dataframe returned contains each attribute's ``name``, ``display_name``, ``d
     3350               cds_end                 CDS end                                    hsapiens_gene_ensembl
 
 Filters
-=======
+-------
 
 Datasets can be queried using filters that restrict the returned information to some specific subset of interest (e.g. chromosome, start position, etc.). In order to retrieve the list of filters available for a given dataset, the ``find_filters()`` function can be used::
 
@@ -98,7 +98,7 @@ This function accepts an optional ``dataset`` argument, which defaults to "hsapi
     42               so_consequence_name  list              hsapiens_gene_ensembl
 
 Queries
--------
+=======
 
 Once the desired mart, dataset, attributes and filters have been explored (or if they were known beforehand), it is possible to query BioMart to retrieve the actual data; queries can be performed synchronously or asynchronously.
 
@@ -107,7 +107,7 @@ Exploring the difference between these two approaches is out of the scope of thi
 Simply put, apybiomart allows to perform synchronous queries to explore the data, and asynchronous queries to group multiple queries and run them efficiently.
 
 Synchronous Queries
-===================
+-------------------
 
 Synchronous queries can be performed using the ``query()`` function, which accepts ``attributes`` and ``filters`` arguments, and an optional ``dataset`` argument (which defaults to "hsapiens_gene_ensembl")::
 
@@ -119,7 +119,7 @@ Synchronous queries can be performed using the ``query()`` function, which accep
 The ``attributes`` are provided as a list of properties, while ``filters`` are represented by a filter name : filter value dictionary. The returned dataframe contains the result of the query, restricted according to the provided filters and attributes.
 
 Asynchronous Queries
-====================
+--------------------
 
 Asynchronous queries can be performed using the ``aquery()`` function, which works just like ``query()``, with the only difference that this is an async coroutine, so it needs to be handled properly taking advantage of the ``asyncio`` event loop::
 

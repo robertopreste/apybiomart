@@ -55,7 +55,7 @@ Async pythonic interface to BioMart.
 
 
 Features
---------
+========
 
 apybiomart is a Python module which provides a simple asynchronous interface to Ensembl BioMart_. Users can exploit the async interface to schedule multiple queries using all the commodities offered by Python's asyncio library.
 
@@ -68,7 +68,7 @@ Depending on specific needs, apybiomart offers different entry points:
 Please refer to the Usage_ section of the documentation for further information.
 
 Background
-==========
+----------
 
 apybiomart was originally born as a fork of the great pybiomart_ package.
 
@@ -77,7 +77,7 @@ I was working on a project that employed a series of async calls to several onli
 This said, all the credits go to jrderuiter_, which created the original pybiomart_ package.
 
 Installation
-------------
+============
 
 **apybiomart only supports Python 3**, and can be installed using pip::
 
@@ -86,7 +86,7 @@ Installation
 Please refer to the Installation_ section of the documentation for further information.
 
 Credits
--------
+=======
 
 This package was created with Cookiecutter_ and the `cc-pypackage`_ project template.
 
