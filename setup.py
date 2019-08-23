@@ -43,6 +43,6 @@ setup(  # pragma: no cover
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/robertopreste/apybiomart',
-    version='0.3.3',
+    version='0.3.4',
     zip_safe=False,
 )
