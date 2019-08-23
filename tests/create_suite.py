@@ -10,20 +10,14 @@ DATADIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "data")
 
 
 def create_marts() -> bool:
-    """Create and store the pickled marts dataframe.
-
-    :return: bool
-    """
+    """Create and store the pickled marts dataframe."""
     df = apy.find_marts()
     df.to_pickle(os.path.join(DATADIR, "marts.pkl"))
     return True
 
 
 def create_datasets() -> bool:
-    """Create and store the pickled datasets dataframes.
-
-    :return: bool
-    """
+    """Create and store the pickled datasets dataframes."""
     df1 = apy.find_datasets("ENSEMBL_MART_ENSEMBL")
     df1.to_pickle(os.path.join(DATADIR, "datasets_ensembl.pkl"))
     df2 = apy.find_datasets("ENSEMBL_MART_MOUSE")
@@ -42,10 +36,7 @@ def create_datasets() -> bool:
 
 
 def create_attributes() -> bool:
-    """Create and store the pickled attributes dataframes.
-
-    :return: bool
-    """
+    """Create and store the pickled attributes dataframes."""
     df1 = apy.find_attributes("hsapiens_gene_ensembl")
     df1.to_pickle(os.path.join(DATADIR,
                                "attributes_hsapiens_gene_ensembl.pkl"))
@@ -66,10 +57,7 @@ def create_attributes() -> bool:
 
 
 def create_filters() -> bool:
-    """Create and store the pickled filters dataframes.
-
-    :return: bool
-    """
+    """Create and store the pickled filters dataframes."""
     df1 = apy.find_filters("hsapiens_gene_ensembl")
     df1.to_pickle(os.path.join(DATADIR, "filters_hsapiens_gene_ensembl.pkl"))
     df2 = apy.find_filters("mlpj_gene_ensembl")
@@ -88,10 +76,7 @@ def create_filters() -> bool:
 
 
 def create_queries() -> bool:
-    """Create and store the pickled queries dataframes.
-
-    :return: bool
-    """
+    """Create and store the pickled queries dataframes."""
     df1 = apy.query(attributes=["ensembl_gene_id", "external_gene_name"],
                     filters={"chromosome_name": "1"},
                     dataset="hsapiens_gene_ensembl")
