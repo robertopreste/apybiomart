@@ -1,4 +1,4 @@
-requests==2.21.0
-asyncio==3.4.3
-aiohttp==3.5.4
-pandas==0.24.2
+requests>=2.20.0
+asyncio>=3.4
+aiohttp>=3.4
+pandas>=0.23.2

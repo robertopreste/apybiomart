@@ -93,3 +93,8 @@ History
 * Better handling of filters arguments for ``query()`` and ``aquery()`` functions;
 * Convert docstrings to Google style;
 * Fix documentation.
+
+0.3.5 (2019-08-25)
+------------------
+
+* Relax requirement versions.
