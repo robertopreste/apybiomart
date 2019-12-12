@@ -18,10 +18,6 @@ apybiomart
     :target: https://circleci.com/gh/robertopreste/apybiomart
     :alt: CircleCI build status
 
-.. image:: https://ci.appveyor.com/api/projects/status/40xnw7ww187taoif?svg=true
-    :target: https://ci.appveyor.com/project/robertopreste/apybiomart
-    :alt: AppVeyor build status
-
 .. image:: https://codecov.io/gh/robertopreste/apybiomart/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/robertopreste/apybiomart
     :alt: Codecov status
