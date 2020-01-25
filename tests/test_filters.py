@@ -32,32 +32,6 @@ def test_find_filters_ensembl(df_filters_ensembl_hsapiens_gene):
     assert_frame_equal(result, expect)
 
 
-def test_find_filters_mouse(df_filters_mouse_mlpj_gene):
-    """Test the available filters returned by list_filters() for the
-    mlpj_gene_ensembl dataset."""
-    expect = (df_filters_mouse_mlpj_gene
-              .sort_values(by="name", axis=0)
-              .reset_index(drop=True))
-    result = (find_filters("mlpj_gene_ensembl")
-              .sort_values(by="name", axis=0)
-              .reset_index(drop=True))
-
-    assert_frame_equal(result, expect)
-
-
-def test_find_filters_sequence(df_filters_sequence_cdingo_genomic):
-    """Test the available filters returned by list_filters() for the
-    cdingo_genomic_sequence dataset."""
-    expect = (df_filters_sequence_cdingo_genomic
-              .sort_values(by="name", axis=0)
-              .reset_index(drop=True))
-    result = (find_filters("cdingo_genomic_sequence")
-              .sort_values(by="name", axis=0)
-              .reset_index(drop=True))
-
-    assert_frame_equal(result, expect)
-
-
 def test_find_filters_ontology(df_filters_ontology_closure_eco):
     """Test the available filters returned by list_filters() for the
     closure_ECO dataset."""

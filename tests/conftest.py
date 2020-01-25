@@ -82,23 +82,6 @@ def df_attributes_ensembl_hsapiens_gene() -> pd.DataFrame:
 
 
 @pytest.fixture
-def df_attributes_mouse_mlpj_gene() -> pd.DataFrame:
-    """Dataframe with available attributes for the mlpj_gene_ensembl dataset."""
-    df = pd.read_pickle(os.path.join(DATADIR,
-                                     "attributes_mlpj_gene_ensembl.pkl"))
-    return df
-
-
-@pytest.fixture
-def df_attributes_sequence_cdingo_genomic() -> pd.DataFrame:
-    """Dataframe with available attributes for the cdingo_genomic_sequence
-    dataset."""
-    df = pd.read_pickle(os.path.join(DATADIR,
-                                     "attributes_cdingo_genomic_sequence.pkl"))
-    return df
-
-
-@pytest.fixture
 def df_attributes_ontology_closure_eco() -> pd.DataFrame:
     """Dataframe with available attributes for the closure_ECO dataset."""
     df = pd.read_pickle(os.path.join(DATADIR,
@@ -138,23 +121,6 @@ def df_filters_ensembl_hsapiens_gene() -> pd.DataFrame:
     dataset."""
     df = pd.read_pickle(os.path.join(DATADIR,
                                      "filters_hsapiens_gene_ensembl.pkl"))
-    return df
-
-
-@pytest.fixture
-def df_filters_mouse_mlpj_gene() -> pd.DataFrame:
-    """Dataframe with available filters for the mlpj_gene_ensembl dataset."""
-    df = pd.read_pickle(os.path.join(DATADIR,
-                                     "filters_mlpj_gene_ensembl.pkl"))
-    return df
-
-
-@pytest.fixture
-def df_filters_sequence_cdingo_genomic() -> pd.DataFrame:
-    """Dataframe with available filters for the cdingo_genomic_sequence
-    dataset."""
-    df = pd.read_pickle(os.path.join(DATADIR,
-                                     "filters_cdingo_genomic_sequence.pkl"))
     return df
 
 
@@ -216,13 +182,4 @@ def df_query_ensembl_hsapiens_gene_chrom_3() -> pd.DataFrame:
     hsapiens_gene_ensembl dataset."""
     df = pd.read_pickle(os.path.join(DATADIR,
                                      "query_hsapiens_gene_chrom_3.pkl"))
-    return df
-
-
-@pytest.fixture
-def df_query_ensembl_maj_gene_chrom_1() -> pd.DataFrame:
-    """Dataframe with the expected query result for chromosome 1 of the
-    maj_gene_ensembl dataset."""
-    df = pd.read_pickle(os.path.join(DATADIR,
-                                     "query_maj_gene_chrom_1.pkl"))
     return df
