@@ -30,6 +30,11 @@ setup(  # pragma: no cover
         'Programming Language :: Python :: 3.7',
     ],
     description="Async pythonic interface to Biomart.",
+    entry_points={
+        "console_scripts": [
+            "apybiomart=apybiomart.cli:main",
+        ],
+    },
     install_requires=requirements,
     license="MIT license",
     long_description=readme + '\n\n' + history,
