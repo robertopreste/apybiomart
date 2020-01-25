@@ -11,7 +11,6 @@ def test_aquery_default(df_query_ensembl_hsapiens_gene_chrom_2):
     """Test the async query results for the default dataset
     (hsapiens_gene_ensembl)."""
     expect = (df_query_ensembl_hsapiens_gene_chrom_2
-              # .sort_values(by="name", axis=0)
               .reset_index(drop=True))
 
     loop = asyncio.get_event_loop()
@@ -27,7 +26,6 @@ def test_aquery_default_int(df_query_ensembl_hsapiens_gene_chrom_2):
     """Test the async query results for the default dataset
     (hsapiens_gene_ensembl) with int filters parameter."""
     expect = (df_query_ensembl_hsapiens_gene_chrom_2
-              # .sort_values(by="name", axis=0)
               .reset_index(drop=True))
 
     loop = asyncio.get_event_loop()
@@ -42,7 +40,6 @@ def test_aquery_default_int(df_query_ensembl_hsapiens_gene_chrom_2):
 def test_aquery_ensembl(df_query_ensembl_hsapiens_gene_chrom_2):
     """Test the async query results for the hsapiens_gene_ensembl dataset."""
     expect = (df_query_ensembl_hsapiens_gene_chrom_2
-              # .sort_values(by="name", axis=0)
               .reset_index(drop=True))
 
     loop = asyncio.get_event_loop()

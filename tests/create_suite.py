@@ -40,11 +40,6 @@ def create_attributes() -> bool:
     df1 = apy.find_attributes("hsapiens_gene_ensembl")
     df1.to_pickle(os.path.join(DATADIR,
                                "attributes_hsapiens_gene_ensembl.pkl"))
-    # df2 = apy.find_attributes("mlpj_gene_ensembl")
-    # df2.to_pickle(os.path.join(DATADIR, "attributes_mlpj_gene_ensembl.pkl"))
-    # df3 = apy.find_attributes("cdingo_genomic_sequence")
-    # df3.to_pickle(os.path.join(DATADIR,
-    #                            "attributes_cdingo_genomic_sequence.pkl"))
     df4 = apy.find_attributes("closure_ECO")
     df4.to_pickle(os.path.join(DATADIR, "attributes_closure_ECO.pkl"))
     df5 = apy.find_attributes("hsapiens_encode")
@@ -60,10 +55,6 @@ def create_filters() -> bool:
     """Create and store the pickled filters dataframes."""
     df1 = apy.find_filters("hsapiens_gene_ensembl")
     df1.to_pickle(os.path.join(DATADIR, "filters_hsapiens_gene_ensembl.pkl"))
-    # df2 = apy.find_filters("mlpj_gene_ensembl")
-    # df2.to_pickle(os.path.join(DATADIR, "filters_mlpj_gene_ensembl.pkl"))
-    # df3 = apy.find_filters("cdingo_genomic_sequence")
-    # df3.to_pickle(os.path.join(DATADIR, "filters_cdingo_genomic_sequence.pkl"))
     df4 = apy.find_filters("closure_ECO")
     df4.to_pickle(os.path.join(DATADIR, "filters_closure_ECO.pkl"))
     df5 = apy.find_filters("hsapiens_encode")
@@ -89,10 +80,6 @@ def create_queries() -> bool:
                     filters={"chromosome_name": "3"},
                     dataset="hsapiens_gene_ensembl")
     df3.to_pickle(os.path.join(DATADIR, "query_hsapiens_gene_chrom_3.pkl"))
-    # df4 = apy.query(attributes=["ensembl_gene_id", "external_gene_name"],
-    #                 filters={"chromosome_name": "1"},
-    #                 dataset="maj_gene_ensembl")
-    # df4.to_pickle(os.path.join(DATADIR, "query_maj_gene_chrom_1.pkl"))
     return True
 
 
