@@ -9,10 +9,10 @@ from apybiomart import find_marts
 def test_find_marts(df_marts):
     """Test the available marts returned by list_marts()."""
     expect = (df_marts
-              .sort_values(by="name", axis=0)
+              .sort_values(by="Mart_ID", axis=0)
               .reset_index(drop=True))
     result = (find_marts()
-              .sort_values(by="name", axis=0)
+              .sort_values(by="Mart_ID", axis=0)
               .reset_index(drop=True))
 
     assert_frame_equal(result, expect)
