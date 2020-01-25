@@ -7,7 +7,7 @@ from apybiomart import find_filters
 
 
 def test_find_filters_default(df_filters_ensembl_hsapiens_gene):
-    """Test the available filters returned by list_filters() for the
+    """Test the available filters returned by find_filters() for the
     default dataset (hsapiens_gene_ensembl)."""
     expect = (df_filters_ensembl_hsapiens_gene
               .sort_values(by="Filter_ID", axis=0)
@@ -20,7 +20,7 @@ def test_find_filters_default(df_filters_ensembl_hsapiens_gene):
 
 
 def test_find_filters_ensembl(df_filters_ensembl_hsapiens_gene):
-    """Test the available filters returned by list_filters() for the
+    """Test the available filters returned by find_filters() for the
     hsapiens_gene_ensembl dataset."""
     expect = (df_filters_ensembl_hsapiens_gene
               .sort_values(by="Filter_ID", axis=0)
@@ -33,7 +33,7 @@ def test_find_filters_ensembl(df_filters_ensembl_hsapiens_gene):
 
 
 def test_find_filters_ontology(df_filters_ontology_closure_eco):
-    """Test the available filters returned by list_filters() for the
+    """Test the available filters returned by find_filters() for the
     closure_ECO dataset."""
     expect = (df_filters_ontology_closure_eco
               .sort_values(by="Filter_ID", axis=0)
@@ -46,7 +46,7 @@ def test_find_filters_ontology(df_filters_ontology_closure_eco):
 
 
 def test_find_filters_genomic(df_filters_genomic_hsapiens_encode):
-    """Test the available filters returned by list_filters() for the
+    """Test the available filters returned by find_filters() for the
     hsapiens_encode dataset."""
     expect = (df_filters_genomic_hsapiens_encode
               .sort_values(by="Filter_ID", axis=0)
@@ -59,7 +59,7 @@ def test_find_filters_genomic(df_filters_genomic_hsapiens_encode):
 
 
 def test_find_filters_snp(df_filters_snp_chircus_snp):
-    """Test the available filters returned by list_filters() for the
+    """Test the available filters returned by find_filters() for the
     chircus_snp dataset."""
     expect = (df_filters_snp_chircus_snp
               .sort_values(by="Filter_ID", axis=0)
@@ -72,7 +72,7 @@ def test_find_filters_snp(df_filters_snp_chircus_snp):
 
 
 def test_find_filters_funcgen(df_filters_funcgen_hsapiens_peak):
-    """Test the available filters returned by list_filters() for the
+    """Test the available filters returned by find_filters() for the
     hsapiens_peak dataset."""
     expect = (df_filters_funcgen_hsapiens_peak
               .sort_values(by="Filter_ID", axis=0)
