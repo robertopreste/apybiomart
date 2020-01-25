@@ -82,12 +82,14 @@ class MartServer(_Server):
     def find_marts(self) -> pd.DataFrame:
         """Return the list of available marts as a dataframe.
 
-        Returns
+        Returns:
             pd.DataFrame
         """
-        return pd.DataFrame.from_records(self._fetch_marts(),
-                                         columns=["name",
-                                                  "display_name"])
+        df = pd.DataFrame.from_records(self._fetch_marts(),
+                                       columns=["name", "display_name"])
+        df.columns = ["Mart_ID", "Mart_name"]
+
+        return df
 
     def _fetch_marts(self) -> Dict[str, Tuple[Any]]:
         """Retrieve the available marts from BioMart.
@@ -144,6 +146,7 @@ class DatasetServer(_Server):
                                 "virtual_schema", "unknown5"],
                          usecols=["name", "display_name"])
         df["mart"] = self.mart
+        df.columns = ["Dataset_ID", "Dataset_name", "Mart_ID"]
 
         return df
 
@@ -181,6 +184,8 @@ class AttributesServer(_Server):
                                                 "display_name",
                                                 "description"])
         df["dataset"] = self.dataset
+        df.columns = ["Attribute_ID", "Attribute_name",
+                      "Attribute_description", "Dataset_name"]
 
         return df
 
@@ -243,6 +248,8 @@ class FiltersServer(_Server):
                                                 "type",
                                                 "description"])
         df["dataset"] = self.dataset
+        df.columns = ["Filter_ID", "Filter_type",
+                      "Filter_description", "Dataset_name"]
 
         return df
 
