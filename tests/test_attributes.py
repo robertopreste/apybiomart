@@ -32,32 +32,6 @@ def test_find_attributes_ensembl(df_attributes_ensembl_hsapiens_gene):
     assert_frame_equal(result, expect)
 
 
-def test_find_attributes_mouse(df_attributes_mouse_mlpj_gene):
-    """Test the available attributes returned by list_attributes() for the
-    mlpj_gene_ensembl dataset."""
-    expect = (df_attributes_mouse_mlpj_gene
-              .sort_values(by="name", axis=0)
-              .reset_index(drop=True))
-    result = (find_attributes("mlpj_gene_ensembl")
-              .sort_values(by="name", axis=0)
-              .reset_index(drop=True))
-
-    assert_frame_equal(result, expect)
-
-
-def test_find_attributes_sequence(df_attributes_sequence_cdingo_genomic):
-    """Test the available attributes returned by list_attributes() for the
-    cdingo_genomic_sequence dataset."""
-    expect = (df_attributes_sequence_cdingo_genomic
-              .sort_values(by="name", axis=0)
-              .reset_index(drop=True))
-    result = (find_attributes("cdingo_genomic_sequence")
-              .sort_values(by="name", axis=0)
-              .reset_index(drop=True))
-
-    assert_frame_equal(result, expect)
-
-
 def test_find_attributes_ontology(df_attributes_ontology_closure_eco):
     """Test the available attributes returned by list_attributes() for the
     closure_ECO dataset."""
