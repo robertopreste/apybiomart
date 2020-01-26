@@ -98,3 +98,9 @@ History
 ------------------
 
 * Relax requirement versions.
+
+0.4.0 (2020-01-26)
+==================
+
+* Add CLI commands for finding marts, datasets, attributes and filters;
+* Change output dataframe column names.
