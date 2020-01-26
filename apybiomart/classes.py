@@ -185,7 +185,7 @@ class AttributesServer(_Server):
                                                 "description"])
         df["dataset"] = self.dataset
         df.columns = ["Attribute_ID", "Attribute_name",
-                      "Attribute_description", "Dataset_name"]
+                      "Attribute_description", "Dataset_ID"]
 
         return df
 
@@ -249,7 +249,7 @@ class FiltersServer(_Server):
                                                 "description"])
         df["dataset"] = self.dataset
         df.columns = ["Filter_ID", "Filter_type",
-                      "Filter_description", "Dataset_name"]
+                      "Filter_description", "Dataset_ID"]
 
         return df
 

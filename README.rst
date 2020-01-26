@@ -38,9 +38,6 @@ apybiomart
     :target: https://pepy.tech/project/apybiomart
     :alt: Downloads
 
-.. image:: https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg
-   :target: https://saythanks.io/to/robertopreste
-
 
 Async pythonic interface to BioMart.
 
@@ -59,7 +56,14 @@ Depending on specific needs, apybiomart offers different entry points:
 
 * an asynchronous ``aquery()`` function, to schedule multiple queries in the same event loop;
 * a synchronous ``query()`` function, which can be used for exploratory queries, executed in real time;
-* a set of synchronous ``find_*()`` functions, which can be used to retrieve the list of available marts, datasets for a specific mart, attributes and filters for a specific dataset.
+* a set of synchronous ``find_*()`` functions, which can be used to retrieve the list of available
+  marts (``find_marts()``), datasets for a specific mart (``find_datasets()``), attributes
+  (``find_attributes()``) and filters (``find_filters()``) for a specific dataset.
+
+  - a set of related CLI commands also exists to allow exploration of these data from the command
+    line; these are, respectively, ``apybiomart marts``, ``apybiomart datasets``,
+    ``apybiomart attributes`` and ``apybiomart filters``. Run ``apybiomart --help`` for further
+    details.
 
 Please refer to the Usage_ section of the documentation for further information.
 
@@ -68,7 +72,11 @@ Background
 
 apybiomart was originally born as a fork of the great pybiomart_ package.
 
-I was working on a project that employed a series of async calls to several online resources, but I couldn't manage to perform asynchronous calls to BioMart using that package, so I decided to modify it to better suit my needs. However, it gradually evolved into a very different thing: the original implementation was rewritten and the structure of the package changed a bit, in a way that I found most useful for my purpose.
+I was working on a project that employed a series of async calls to several online resources, but
+I couldn't manage to perform asynchronous calls to BioMart using that package, so I decided to
+modify it to better suit my needs. However, it gradually evolved into a very different thing:
+the original implementation was rewritten and the structure of the package changed a bit, in a
+way that I found most useful for my purpose.
 
 This said, all the credits go to jrderuiter_, which created the original pybiomart_ package.
 
