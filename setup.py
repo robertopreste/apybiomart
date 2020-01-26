@@ -9,8 +9,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ["requests>=2.20.0", "asyncio>=3.4", "aiohttp>=3.4",
-                "pandas>=0.23.2"]
+requirements = ["requests", "asyncio", "aiohttp", "pandas"]
 
 setup_requirements = ["pytest-runner", ]
 
@@ -31,6 +30,11 @@ setup(  # pragma: no cover
         'Programming Language :: Python :: 3.7',
     ],
     description="Async pythonic interface to Biomart.",
+    entry_points={
+        "console_scripts": [
+            "apybiomart=apybiomart.cli:main",
+        ],
+    },
     install_requires=requirements,
     license="MIT license",
     long_description=readme + '\n\n' + history,
