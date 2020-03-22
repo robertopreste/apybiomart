@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
+import os
 import pytest
+
+import pandas as pd
 from pandas.testing import assert_frame_equal
+
 from apybiomart import find_datasets
 
 
@@ -17,6 +21,25 @@ def test_find_datasets_default(df_datasets_ensembl):
               .reset_index(drop=True))
 
     assert_frame_equal(result, expect)
+
+
+def test_find_datasets_save(df_datasets_ensembl):
+    """Test the available datasets returned by find_datasets(save=True) for
+    the default mart (ENSEMBL_MART_ENSEMBL)."""
+    expect = (df_datasets_ensembl
+              .sort_values(by="Dataset_ID", axis=0)
+              .reset_index(drop=True))
+    _ = find_datasets(save=True)
+    saved = pd.read_csv("apybiomart_datasets.csv")
+    result = (saved
+              .replace(pd.np.nan, "")
+              .sort_values(by="Dataset_ID", axis=0)
+              .reset_index(drop=True))
+
+    try:
+        assert_frame_equal(result, expect)
+    finally:
+        os.remove("apybiomart_datasets.csv")
 
 
 def test_find_datasets_ensembl(df_datasets_ensembl):

@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
+import os
 import pytest
+
+import pandas as pd
 from pandas.testing import assert_frame_equal
+
 from apybiomart import find_attributes
 
 
@@ -17,6 +21,25 @@ def test_find_attributes_default(df_attributes_ensembl_hsapiens_gene):
               .reset_index(drop=True))
 
     assert_frame_equal(result, expect)
+
+
+def test_find_attributes_save(df_attributes_ensembl_hsapiens_gene):
+    """Test the available attributes returned by find_attributes(save=True)
+    for the default dataset (hsapiens_gene_ensembl)."""
+    expect = (df_attributes_ensembl_hsapiens_gene
+              .sort_values(by="Attribute_ID", axis=0)
+              .reset_index(drop=True))
+    _ = find_attributes(save=True)
+    saved = pd.read_csv("apybiomart_attributes.csv")
+    result = (saved
+              .replace(pd.np.nan, "")
+              .sort_values(by="Attribute_ID", axis=0)
+              .reset_index(drop=True))
+
+    try:
+        assert_frame_equal(result, expect)
+    finally:
+        os.remove("apybiomart_attributes.csv")
 
 
 def test_find_attributes_ensembl(df_attributes_ensembl_hsapiens_gene):

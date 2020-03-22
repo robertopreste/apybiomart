@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
+import io
+from typing import Optional, Dict, Any, Tuple, Generator, List, Union
+from xml.etree import ElementTree as ET
+
 import asyncio
 import aiohttp
-import io
 import requests
 import pandas as pd
-from xml.etree import ElementTree as ET
-from typing import Optional, Dict, Any, Tuple, Generator, List, Union
 
 
 class _BiomartException(Exception):
@@ -20,11 +21,14 @@ class _Server:
 
     Attributes:
         host: URL to connect to
+        save: save results to a CSV file [default: False]
     """
 
     def __init__(self,
-                 host: str = "http://www.ensembl.org/biomart/martservice"):
+                 host: str = "http://www.ensembl.org/biomart/martservice",
+                 save: bool = False):
         self.host = host
+        self.save = save
         if not self._check_connection():
             raise _BiomartException("No internet connection available!")
 
@@ -76,8 +80,8 @@ class _Server:
 class MartServer(_Server):
     """Class used to retrieve and list available marts."""
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, save: bool = False):
+        super().__init__(save=save)
 
     def find_marts(self) -> pd.DataFrame:
         """Return the list of available marts as a dataframe.
@@ -88,6 +92,9 @@ class MartServer(_Server):
         df = pd.DataFrame.from_records(self._fetch_marts(),
                                        columns=["name", "display_name"])
         df.columns = ["Mart_ID", "Mart_name"]
+        df.replace(pd.np.nan, "", inplace=True)
+        if self.save:
+            df.to_csv("apybiomart_marts.csv", index=False)
 
         return df
 
@@ -131,8 +138,8 @@ class DatasetServer(_Server):
         mart: BioMart mart name
     """
 
-    def __init__(self, mart: str):
-        super().__init__()
+    def __init__(self, mart: str, save: bool = False):
+        super().__init__(save=save)
         self.mart = mart
 
     def find_datasets(self) -> pd.DataFrame:
@@ -147,6 +154,9 @@ class DatasetServer(_Server):
                          usecols=["name", "display_name"])
         df["mart"] = self.mart
         df.columns = ["Dataset_ID", "Dataset_name", "Mart_ID"]
+        df.replace(pd.np.nan, "", inplace=True)
+        if self.save:
+            df.to_csv("apybiomart_datasets.csv", index=False)
 
         return df
 
@@ -172,8 +182,8 @@ class AttributesServer(_Server):
         dataset: BioMart dataset name
     """
 
-    def __init__(self, dataset: str):
-        super().__init__()
+    def __init__(self, dataset: str, save: bool = False):
+        super().__init__(save=save)
         self.dataset = dataset
 
     def find_attributes(self) -> pd.DataFrame:
@@ -186,6 +196,9 @@ class AttributesServer(_Server):
         df["dataset"] = self.dataset
         df.columns = ["Attribute_ID", "Attribute_name",
                       "Attribute_description", "Dataset_ID"]
+        df.replace(pd.np.nan, "", inplace=True)
+        if self.save:
+            df.to_csv("apybiomart_attributes.csv", index=False)
 
         return df
 
@@ -236,8 +249,8 @@ class FiltersServer(_Server):
         dataset: BioMart dataset name
     """
 
-    def __init__(self, dataset: str):
-        super().__init__()
+    def __init__(self, dataset: str, save: bool = False):
+        super().__init__(save=save)
         self.dataset = dataset
 
     def find_filters(self) -> pd.DataFrame:
@@ -250,6 +263,9 @@ class FiltersServer(_Server):
         df["dataset"] = self.dataset
         df.columns = ["Filter_ID", "Filter_type",
                       "Filter_description", "Dataset_ID"]
+        df.replace(pd.np.nan, "", inplace=True)
+        if self.save:
+            df.to_csv("apybiomart_filters.csv", index=False)
 
         return df
 
@@ -304,8 +320,9 @@ class Query(_Server):
     def __init__(self,
                  attributes: List[str],
                  filters: Dict[str, Union[str, int, list, tuple, bool]],
-                 dataset: str):
-        super().__init__()
+                 dataset: str,
+                 save: bool = False):
+        super().__init__(save=save)
         self.attributes = attributes
         self.filters = filters
         self.dataset = dataset
@@ -357,6 +374,10 @@ class Query(_Server):
         # Type error is raised of a data type is not understood by pandas
         except TypeError as err:
             raise ValueError("Non valid data type is used in dtypes")
+        result.replace(pd.np.nan, "", inplace=True)
+
+        if self.save:
+            result.to_csv("apybiomart_query.csv", index=False)
 
         return result
 
@@ -407,6 +428,10 @@ class Query(_Server):
         # Type error is raised of a data type is not understood by pandas
         except TypeError as err:
             raise ValueError("Non valid data type is used in dtypes")
+        result.replace(pd.np.nan, "", inplace=True)
+
+        if self.save:
+            result.to_csv("apybiomart_aquery.csv", index=False)
 
         return result
 

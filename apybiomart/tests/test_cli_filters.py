@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
+import os
 import pytest
+
 from click.testing import CliRunner
 
 from apybiomart import cli
@@ -16,6 +18,18 @@ def test_cli_filters_default():
     assert "Filter ID" in result.output
     assert "link_so_mini_closure" in result.output
     assert "hsapiens_gene_ensembl" in result.output
+
+
+def test_cli_filters_saved():
+    """Test the saved attributes returned by apybiomart filters for the
+    default dataset (hsapiens_gene_ensembl)."""
+    runner = CliRunner()
+    result = runner.invoke(cli.main, ["filters", "--save"])
+    try:
+        assert result.exit_code == 0
+        assert os.path.isfile("apybiomart_filters.csv")
+    finally:
+        os.remove("apybiomart_filters.csv")
 
 
 def test_cli_filters_ontology():

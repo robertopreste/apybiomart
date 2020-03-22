@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
+import os
 import pytest
+
 import asyncio
+import pandas as pd
 from pandas.testing import assert_frame_equal
+
 from apybiomart import aquery
 
 
@@ -20,6 +24,28 @@ def test_aquery_default(df_query_ensembl_hsapiens_gene_chrom_2):
     ).reset_index(drop=True)
 
     assert_frame_equal(result, expect)
+
+
+def test_aquery_save(df_query_ensembl_hsapiens_gene_chrom_2):
+    """Test the saved async query results for the default dataset
+    (hsapiens_gene_ensembl)."""
+    expect = (df_query_ensembl_hsapiens_gene_chrom_2
+              .reset_index(drop=True))
+
+    loop = asyncio.get_event_loop()
+    result = loop.run_until_complete(
+        aquery(attributes=["ensembl_gene_id", "external_gene_name"],
+               filters={"chromosome_name": "2"},
+               save=True)
+    )
+    saved = (pd.read_csv("apybiomart_aquery.csv")
+             .replace(pd.np.nan, "")
+             .reset_index(drop=True))
+
+    try:
+        assert_frame_equal(saved, expect)
+    finally:
+        os.remove("apybiomart_aquery.csv")
 
 
 def test_aquery_default_int(df_query_ensembl_hsapiens_gene_chrom_2):
