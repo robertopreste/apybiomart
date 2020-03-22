@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
-import asyncio
 import os
-import pandas as pd
+
+import asyncio
 import apybiomart as apy
 
 DATADIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "data")

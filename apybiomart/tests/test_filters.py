@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
+import os
 import pytest
+
+import pandas as pd
 from pandas.testing import assert_frame_equal
+
 from apybiomart import find_filters
 
 
@@ -17,6 +21,25 @@ def test_find_filters_default(df_filters_ensembl_hsapiens_gene):
               .reset_index(drop=True))
 
     assert_frame_equal(result, expect)
+
+
+def test_find_filters_save(df_filters_ensembl_hsapiens_gene):
+    """Test the available filters returned by find_filters(save=True) for the
+    default dataset (hsapiens_gene_ensembl)."""
+    expect = (df_filters_ensembl_hsapiens_gene
+              .sort_values(by="Filter_ID", axis=0)
+              .reset_index(drop=True))
+    _ = find_filters(save=True)
+    saved = pd.read_csv("apybiomart_filters.csv")
+    result = (saved
+              .replace(pd.np.nan, "")
+              .sort_values(by="Filter_ID", axis=0)
+              .reset_index(drop=True))
+
+    try:
+        assert_frame_equal(result, expect)
+    finally:
+        os.remove("apybiomart_filters.csv")
 
 
 def test_find_filters_ensembl(df_filters_ensembl_hsapiens_gene):
