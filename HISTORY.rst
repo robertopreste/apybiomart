@@ -104,3 +104,8 @@ History
 
 * Add CLI commands for finding marts, datasets, attributes and filters;
 * Change output dataframe column names.
+
+0.5.0 (2020-03-22)
+==================
+
+* Add CLI and Python module options to save outputs to CSV file.
