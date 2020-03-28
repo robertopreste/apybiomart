@@ -48,6 +48,28 @@ def test_aquery_save(df_query_ensembl_hsapiens_gene_chrom_2):
         os.remove("apybiomart_aquery.csv")
 
 
+def test_aquery_output(df_query_ensembl_hsapiens_gene_chrom_2):
+    """Test the saved async query results with the given filename for the
+    default dataset (hsapiens_gene_ensembl)."""
+    expect = (df_query_ensembl_hsapiens_gene_chrom_2
+              .reset_index(drop=True))
+
+    loop = asyncio.get_event_loop()
+    result = loop.run_until_complete(
+        aquery(attributes=["ensembl_gene_id", "external_gene_name"],
+               filters={"chromosome_name": "2"},
+               save=True, output="tested.csv")
+    )
+    saved = (pd.read_csv("tested.csv")
+             .replace(pd.np.nan, "")
+             .reset_index(drop=True))
+
+    try:
+        assert_frame_equal(saved, expect)
+    finally:
+        os.remove("tested.csv")
+
+
 def test_aquery_default_int(df_query_ensembl_hsapiens_gene_chrom_2):
     """Test the async query results for the default dataset
     (hsapiens_gene_ensembl) with int filters parameter."""

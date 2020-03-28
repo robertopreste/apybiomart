@@ -38,3 +38,21 @@ def test_find_marts_save(df_marts):
         assert_frame_equal(result, expect)
     finally:
         os.remove("apybiomart_marts.csv")
+
+
+def test_find_marts_output(df_marts):
+    """Test the available marts returned by find_marts with a given filename."""
+    expect = (df_marts
+              .sort_values(by="Mart_ID", axis=0)
+              .reset_index(drop=True))
+    _ = find_marts(save=True, output="tested.csv")
+    saved = pd.read_csv("tested.csv")
+    result = (saved
+              .replace(pd.np.nan, "")
+              .sort_values(by="Mart_ID", axis=0)
+              .reset_index(drop=True))
+
+    try:
+        assert_frame_equal(result, expect)
+    finally:
+        os.remove("tested.csv")

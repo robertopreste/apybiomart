@@ -42,6 +42,25 @@ def test_find_filters_save(df_filters_ensembl_hsapiens_gene):
         os.remove("apybiomart_filters.csv")
 
 
+def test_find_filters_output(df_filters_ensembl_hsapiens_gene):
+    """Test the available filters returned by find_filters with a given
+    filename for the default dataset (hsapiens_gene_ensembl)."""
+    expect = (df_filters_ensembl_hsapiens_gene
+              .sort_values(by="Filter_ID", axis=0)
+              .reset_index(drop=True))
+    _ = find_filters(save=True, output="tested.csv")
+    saved = pd.read_csv("tested.csv")
+    result = (saved
+              .replace(pd.np.nan, "")
+              .sort_values(by="Filter_ID", axis=0)
+              .reset_index(drop=True))
+
+    try:
+        assert_frame_equal(result, expect)
+    finally:
+        os.remove("tested.csv")
+
+
 def test_find_filters_ensembl(df_filters_ensembl_hsapiens_gene):
     """Test the available filters returned by find_filters() for the
     hsapiens_gene_ensembl dataset."""

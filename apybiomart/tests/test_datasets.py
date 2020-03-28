@@ -42,6 +42,25 @@ def test_find_datasets_save(df_datasets_ensembl):
         os.remove("apybiomart_datasets.csv")
 
 
+def test_find_datasets_output(df_datasets_ensembl):
+    """Test the available datasets returned by find_datasets with a given
+    filename for the default mart (ENSEMBL_MART_ENSEMBL)."""
+    expect = (df_datasets_ensembl
+              .sort_values(by="Dataset_ID", axis=0)
+              .reset_index(drop=True))
+    _ = find_datasets(save=True, output="tested.csv")
+    saved = pd.read_csv("tested.csv")
+    result = (saved
+              .replace(pd.np.nan, "")
+              .sort_values(by="Dataset_ID", axis=0)
+              .reset_index(drop=True))
+
+    try:
+        assert_frame_equal(result, expect)
+    finally:
+        os.remove("tested.csv")
+
+
 def test_find_datasets_ensembl(df_datasets_ensembl):
     """Test the available datasets returned by find_datasets() for the
     ENSEMBL_MART_ENSEMBL mart."""

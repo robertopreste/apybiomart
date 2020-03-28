@@ -40,6 +40,25 @@ def test_query_save(df_query_ensembl_hsapiens_gene_chrom_2):
         os.remove("apybiomart_query.csv")
 
 
+def test_query_output(df_query_ensembl_hsapiens_gene_chrom_2):
+    """Test the saved query results with a given filename for the default
+    dataset (hsapiens_gene_ensembl)."""
+    expect = (df_query_ensembl_hsapiens_gene_chrom_2
+              .reset_index(drop=True))
+    _ = query(attributes=["ensembl_gene_id", "external_gene_name"],
+              filters={"chromosome_name": "2"},
+              save=True, output="tested.csv")
+    saved = pd.read_csv("tested.csv")
+    result = (saved
+              .replace(pd.np.nan, "")
+              .reset_index(drop=True))
+
+    try:
+        assert_frame_equal(result, expect)
+    finally:
+        os.remove("tested.csv")
+
+
 def test_query_default_int(df_query_ensembl_hsapiens_gene_chrom_2):
     """Test the query results for the default dataset (hsapiens_gene_ensembl)
     with int filters parameter."""

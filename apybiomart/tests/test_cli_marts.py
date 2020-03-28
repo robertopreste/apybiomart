@@ -28,3 +28,16 @@ def test_cli_marts_save():
         assert os.path.isfile("apybiomart_marts.csv")
     finally:
         os.remove("apybiomart_marts.csv")
+
+
+def test_cli_marts_output():
+    """Test the available marts saved by apybiomart marts with a given
+    filename."""
+    runner = CliRunner()
+    result = runner.invoke(cli.main, ["marts", "--save",
+                                      "--output", "tested.csv"])
+    try:
+        assert result.exit_code == 0
+        assert os.path.isfile("tested.csv")
+    finally:
+        os.remove("tested.csv")
