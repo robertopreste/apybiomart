@@ -22,13 +22,16 @@ class _Server:
     Attributes:
         host: URL to connect to
         save: save results to a CSV file [default: False]
+        output: output filename if saving results [default: None]
     """
 
     def __init__(self,
                  host: str = "http://www.ensembl.org/biomart/martservice",
-                 save: bool = False):
+                 save: bool = False,
+                 output: Optional[str] = None):
         self.host = host
         self.save = save
+        self.output = output
         if not self._check_connection():
             raise _BiomartException("No internet connection available!")
 
@@ -80,8 +83,10 @@ class _Server:
 class MartServer(_Server):
     """Class used to retrieve and list available marts."""
 
-    def __init__(self, save: bool = False):
-        super().__init__(save=save)
+    def __init__(self,
+                 save: bool = False,
+                 output: str = "apybiomart_marts.csv"):
+        super().__init__(save=save, output=output)
 
     def find_marts(self) -> pd.DataFrame:
         """Return the list of available marts as a dataframe.
@@ -94,7 +99,7 @@ class MartServer(_Server):
         df.columns = ["Mart_ID", "Mart_name"]
         df.replace(pd.np.nan, "", inplace=True)
         if self.save:
-            df.to_csv("apybiomart_marts.csv", index=False)
+            df.to_csv(self.output, index=False)
 
         return df
 
@@ -138,8 +143,11 @@ class DatasetServer(_Server):
         mart: BioMart mart name
     """
 
-    def __init__(self, mart: str, save: bool = False):
-        super().__init__(save=save)
+    def __init__(self,
+                 mart: str,
+                 save: bool = False,
+                 output: str = "apybiomart_datasets.csv"):
+        super().__init__(save=save, output=output)
         self.mart = mart
 
     def find_datasets(self) -> pd.DataFrame:
@@ -156,7 +164,7 @@ class DatasetServer(_Server):
         df.columns = ["Dataset_ID", "Dataset_name", "Mart_ID"]
         df.replace(pd.np.nan, "", inplace=True)
         if self.save:
-            df.to_csv("apybiomart_datasets.csv", index=False)
+            df.to_csv(self.output, index=False)
 
         return df
 
@@ -182,8 +190,11 @@ class AttributesServer(_Server):
         dataset: BioMart dataset name
     """
 
-    def __init__(self, dataset: str, save: bool = False):
-        super().__init__(save=save)
+    def __init__(self,
+                 dataset: str,
+                 save: bool = False,
+                 output: str = "apybiomart_attributes.csv"):
+        super().__init__(save=save, output=output)
         self.dataset = dataset
 
     def find_attributes(self) -> pd.DataFrame:
@@ -198,7 +209,7 @@ class AttributesServer(_Server):
                       "Attribute_description", "Dataset_ID"]
         df.replace(pd.np.nan, "", inplace=True)
         if self.save:
-            df.to_csv("apybiomart_attributes.csv", index=False)
+            df.to_csv(self.output, index=False)
 
         return df
 
@@ -249,8 +260,11 @@ class FiltersServer(_Server):
         dataset: BioMart dataset name
     """
 
-    def __init__(self, dataset: str, save: bool = False):
-        super().__init__(save=save)
+    def __init__(self,
+                 dataset: str,
+                 save: bool = False,
+                 output: str = "apybiomart_filters.csv"):
+        super().__init__(save=save, output=output)
         self.dataset = dataset
 
     def find_filters(self) -> pd.DataFrame:
@@ -265,7 +279,7 @@ class FiltersServer(_Server):
                       "Filter_description", "Dataset_ID"]
         df.replace(pd.np.nan, "", inplace=True)
         if self.save:
-            df.to_csv("apybiomart_filters.csv", index=False)
+            df.to_csv(self.output, index=False)
 
         return df
 
@@ -321,8 +335,9 @@ class Query(_Server):
                  attributes: List[str],
                  filters: Dict[str, Union[str, int, list, tuple, bool]],
                  dataset: str,
-                 save: bool = False):
-        super().__init__(save=save)
+                 save: bool = False,
+                 output: str = "apybiomart_query.csv"):
+        super().__init__(save=save, output=output)
         self.attributes = attributes
         self.filters = filters
         self.dataset = dataset
@@ -377,7 +392,7 @@ class Query(_Server):
         result.replace(pd.np.nan, "", inplace=True)
 
         if self.save:
-            result.to_csv("apybiomart_query.csv", index=False)
+            result.to_csv(self.output, index=False)
 
         return result
 
@@ -431,7 +446,7 @@ class Query(_Server):
         result.replace(pd.np.nan, "", inplace=True)
 
         if self.save:
-            result.to_csv("apybiomart_aquery.csv", index=False)
+            result.to_csv(self.output, index=False)
 
         return result
 

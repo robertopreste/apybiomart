@@ -42,6 +42,25 @@ def test_find_attributes_save(df_attributes_ensembl_hsapiens_gene):
         os.remove("apybiomart_attributes.csv")
 
 
+def test_find_attributes_output(df_attributes_ensembl_hsapiens_gene):
+    """Test the available attributes returned by find_attributes with a given
+    filename for the default dataset (hsapiens_gene_ensembl)."""
+    expect = (df_attributes_ensembl_hsapiens_gene
+              .sort_values(by="Attribute_ID", axis=0)
+              .reset_index(drop=True))
+    _ = find_attributes(save=True, output="tested.csv")
+    saved = pd.read_csv("tested.csv")
+    result = (saved
+              .replace(pd.np.nan, "")
+              .sort_values(by="Attribute_ID", axis=0)
+              .reset_index(drop=True))
+
+    try:
+        assert_frame_equal(result, expect)
+    finally:
+        os.remove("tested.csv")
+
+
 def test_find_attributes_ensembl(df_attributes_ensembl_hsapiens_gene):
     """Test the available attributes returned by find_attributes() for the
     hsapiens_gene_ensembl dataset."""
