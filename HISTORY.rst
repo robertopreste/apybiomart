@@ -109,3 +109,8 @@ History
 ==================
 
 * Add CLI and Python module options to save outputs to CSV file.
+
+0.5.1 (2020-04-04)
+------------------
+
+* Add option to specify the output CSV filename.

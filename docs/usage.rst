@@ -10,6 +10,11 @@ The main purpose of the package is to perform queries on BioMart (either synchro
 asynchronously), however users may first need to explore the available marts, datasets,
 attributes and filters.
 
+In addition to interactively inspect these results, users can also save them to a CSV file,
+using the ``--save`` flag on the CLI and the ``save=True`` argument in Python, and optionally
+specify a filename using the ``--output <filename.csv>`` option on the CLI and the
+``output="filename.csv"`` argument in Python.
+
 Marts, datasets, attributes and filters
 =======================================
 
