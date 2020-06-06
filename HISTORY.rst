@@ -114,3 +114,10 @@ History
 ------------------
 
 * Add option to specify the output CSV filename.
+
+0.5.2 (2020-06-06)
+------------------
+
+* Update tests and test files;
+* Clean code;
+* Add CI module.

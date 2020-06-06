@@ -2,10 +2,10 @@
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
 import os
-import pytest
 
 import pandas as pd
 from pandas.testing import assert_frame_equal
+import pytest  # noqa
 
 from apybiomart import find_marts
 
@@ -41,7 +41,8 @@ def test_find_marts_save(df_marts):
 
 
 def test_find_marts_output(df_marts):
-    """Test the available marts returned by find_marts with a given filename."""
+    """Test the available marts returned by find_marts with a given
+    filename."""
     expect = (df_marts
               .sort_values(by="Mart_ID", axis=0)
               .reset_index(drop=True))

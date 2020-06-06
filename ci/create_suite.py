@@ -4,19 +4,19 @@
 import os
 
 import asyncio
+import click
+
 import apybiomart as apy
+from apybiomart.tests.conftest import DATADIR
 
-DATADIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "data")
 
-
-def create_marts() -> bool:
+def create_marts():
     """Create and store the pickled marts dataframe."""
     df = apy.find_marts()
     df.to_pickle(os.path.join(DATADIR, "marts.pkl"))
-    return True
 
 
-def create_datasets() -> bool:
+def create_datasets():
     """Create and store the pickled datasets dataframes."""
     df1 = apy.find_datasets("ENSEMBL_MART_ENSEMBL")
     df1.to_pickle(os.path.join(DATADIR, "datasets_ensembl.pkl"))
@@ -32,10 +32,9 @@ def create_datasets() -> bool:
     df6.to_pickle(os.path.join(DATADIR, "datasets_snp.pkl"))
     df7 = apy.find_datasets("ENSEMBL_MART_FUNCGEN")
     df7.to_pickle(os.path.join(DATADIR, "datasets_funcgen.pkl"))
-    return True
 
 
-def create_attributes() -> bool:
+def create_attributes():
     """Create and store the pickled attributes dataframes."""
     df1 = apy.find_attributes("hsapiens_gene_ensembl")
     df1.to_pickle(os.path.join(DATADIR,
@@ -48,10 +47,9 @@ def create_attributes() -> bool:
     df6.to_pickle(os.path.join(DATADIR, "attributes_chircus_snp.pkl"))
     df7 = apy.find_attributes("hsapiens_peak")
     df7.to_pickle(os.path.join(DATADIR, "attributes_hsapiens_peak.pkl"))
-    return True
 
 
-def create_filters() -> bool:
+def create_filters():
     """Create and store the pickled filters dataframes."""
     df1 = apy.find_filters("hsapiens_gene_ensembl")
     df1.to_pickle(os.path.join(DATADIR, "filters_hsapiens_gene_ensembl.pkl"))
@@ -63,10 +61,9 @@ def create_filters() -> bool:
     df6.to_pickle(os.path.join(DATADIR, "filters_chircus_snp.pkl"))
     df7 = apy.find_filters("hsapiens_peak")
     df7.to_pickle(os.path.join(DATADIR, "filters_hsapiens_peak.pkl"))
-    return True
 
 
-def create_queries() -> bool:
+def create_queries():
     """Create and store the pickled queries dataframes."""
     df1 = apy.query(attributes=["ensembl_gene_id", "external_gene_name"],
                     filters={"chromosome_name": "1"},
@@ -80,26 +77,21 @@ def create_queries() -> bool:
                     filters={"chromosome_name": "3"},
                     dataset="hsapiens_gene_ensembl")
     df3.to_pickle(os.path.join(DATADIR, "query_hsapiens_gene_chrom_3.pkl"))
-    return True
 
 
-def main():
-    print("Downloading and saving marts data... ", end="")
+def create_all():
+    click.echo("Downloading and saving marts data... ", nl=False)
     create_marts()
-    print("Done.")
-    print("Downloading and saving datasets data... ", end="")
+    click.echo("Done.")
+    click.echo("Downloading and saving datasets data... ", nl=False)
     create_datasets()
-    print("Done.")
-    print("Downloading and saving attributes data... ", end="")
+    click.echo("Done.")
+    click.echo("Downloading and saving attributes data... ", nl=False)
     create_attributes()
-    print("Done.")
-    print("Downloading and saving filters data... ", end="")
+    click.echo("Done.")
+    click.echo("Downloading and saving filters data... ", nl=False)
     create_filters()
-    print("Done.")
-    print("Downloading and saving queries data... ", end="")
+    click.echo("Done.")
+    click.echo("Downloading and saving queries data... ", nl=False)
     create_queries()
-    print("Done.")
-
-
-if __name__ == '__main__':
-    main()
+    click.echo("Done.")

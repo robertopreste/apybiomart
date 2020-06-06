@@ -5,7 +5,7 @@ import io
 from typing import Optional, Dict, Any, Tuple, Generator, List, Union
 from xml.etree import ElementTree as ET
 
-import asyncio
+import asyncio  # noqa
 import aiohttp
 import requests
 import pandas as pd
@@ -47,7 +47,7 @@ class _Server:
         try:
             _ = requests.get(url, timeout=timeout)
             return True
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException:
             pass
         return False
 
@@ -387,7 +387,7 @@ class Query(_Server):
         try:
             result = pd.read_csv(io.StringIO(resp.text), sep="\t")
         # Type error is raised of a data type is not understood by pandas
-        except TypeError as err:
+        except TypeError:
             raise ValueError("Non valid data type is used in dtypes")
         result.replace(pd.np.nan, "", inplace=True)
 
@@ -441,7 +441,7 @@ class Query(_Server):
         try:
             result = pd.read_csv(io.StringIO(resp), sep="\t")
         # Type error is raised of a data type is not understood by pandas
-        except TypeError as err:
+        except TypeError:
             raise ValueError("Non valid data type is used in dtypes")
         result.replace(pd.np.nan, "", inplace=True)
 
