@@ -16,7 +16,7 @@ def test_cli_marts():
     assert result.exit_code == 0
     assert "Mart ID" in result.output
     assert "ENSEMBL_MART_ENSEMBL" in result.output
-    assert "Ensembl Genes 99" in result.output
+    assert "Ensembl Genes 100" in result.output
 
 
 def test_cli_marts_save():
