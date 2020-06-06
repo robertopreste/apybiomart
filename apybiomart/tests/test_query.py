@@ -2,16 +2,17 @@
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
 import os
-import pytest
 
 import pandas as pd
 from pandas.testing import assert_frame_equal
+import pytest  # noqa
 
 from apybiomart import query
 
 
 def test_query_default(df_query_ensembl_hsapiens_gene_chrom_2):
-    """Test the query results for the default dataset (hsapiens_gene_ensembl)."""
+    """Test the query results for the default dataset
+    (hsapiens_gene_ensembl)."""
     expect = (df_query_ensembl_hsapiens_gene_chrom_2
               .reset_index(drop=True))
     result = (query(attributes=["ensembl_gene_id", "external_gene_name"],

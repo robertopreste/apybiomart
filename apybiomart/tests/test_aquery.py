@@ -2,11 +2,11 @@
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
 import os
-import pytest
 
 import asyncio
 import pandas as pd
 from pandas.testing import assert_frame_equal
+import pytest  # noqa
 
 from apybiomart import aquery
 
@@ -33,7 +33,7 @@ def test_aquery_save(df_query_ensembl_hsapiens_gene_chrom_2):
               .reset_index(drop=True))
 
     loop = asyncio.get_event_loop()
-    result = loop.run_until_complete(
+    result = loop.run_until_complete(  # noqa
         aquery(attributes=["ensembl_gene_id", "external_gene_name"],
                filters={"chromosome_name": "2"},
                save=True)
@@ -55,7 +55,7 @@ def test_aquery_output(df_query_ensembl_hsapiens_gene_chrom_2):
               .reset_index(drop=True))
 
     loop = asyncio.get_event_loop()
-    result = loop.run_until_complete(
+    result = loop.run_until_complete(  # noqa
         aquery(attributes=["ensembl_gene_id", "external_gene_name"],
                filters={"chromosome_name": "2"},
                save=True, output="tested.csv")
@@ -156,4 +156,3 @@ def test_aquery_ensembl_multi_int(df_query_ensembl_hsapiens_gene_chrom_1,
     assert_frame_equal(result1, expect1)
     assert_frame_equal(result2, expect2)
     assert_frame_equal(result3, expect3)
-

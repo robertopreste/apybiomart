@@ -2,10 +2,10 @@
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
 import os
-import pytest
 
 import pandas as pd
 from pandas.testing import assert_frame_equal
+import pytest  # noqa
 
 from apybiomart import find_filters
 

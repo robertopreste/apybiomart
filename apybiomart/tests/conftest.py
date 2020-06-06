@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
-import pytest
-import pickle
 import os
+
 import pandas as pd
+import pytest
 
 DATADIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "data")
 

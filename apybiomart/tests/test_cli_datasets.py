@@ -2,9 +2,9 @@
 # -*- coding: UTF-8 -*-
 # Created by Roberto Preste
 import os
-import pytest
 
 from click.testing import CliRunner
+import pytest  # noqa
 
 from apybiomart import cli
 
