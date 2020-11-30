@@ -3,6 +3,7 @@
 # Created by Roberto Preste
 import os
 
+import numpy as np
 import pandas as pd
 from pandas.testing import assert_frame_equal
 import pytest  # noqa
@@ -30,7 +31,7 @@ def test_find_marts_save(df_marts):
     _ = find_marts(save=True)
     saved = pd.read_csv("apybiomart_marts.csv")
     result = (saved
-              .replace(pd.np.nan, "")
+              .replace(np.nan, "")
               .sort_values(by="Mart_ID", axis=0)
               .reset_index(drop=True))
 
@@ -49,7 +50,7 @@ def test_find_marts_output(df_marts):
     _ = find_marts(save=True, output="tested.csv")
     saved = pd.read_csv("tested.csv")
     result = (saved
-              .replace(pd.np.nan, "")
+              .replace(np.nan, "")
               .sort_values(by="Mart_ID", axis=0)
               .reset_index(drop=True))
 

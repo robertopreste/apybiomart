@@ -121,3 +121,9 @@ History
 * Update tests and test files;
 * Clean code;
 * Add CI module.
+
+0.5.3 (2020-11-30)
+------------------
+
+* Remove deprecated ``pd.np`` occurrencies;
+* Update test files.
