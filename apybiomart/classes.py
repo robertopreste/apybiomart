@@ -8,6 +8,7 @@ from xml.etree import ElementTree as ET
 import asyncio  # noqa
 import aiohttp
 import requests
+import numpy as np
 import pandas as pd
 
 
@@ -97,7 +98,7 @@ class MartServer(_Server):
         df = pd.DataFrame.from_records(self._fetch_marts(),
                                        columns=["name", "display_name"])
         df.columns = ["Mart_ID", "Mart_name"]
-        df.replace(pd.np.nan, "", inplace=True)
+        df.replace(np.nan, "", inplace=True)
         if self.save:
             df.to_csv(self.output, index=False)
 
@@ -162,7 +163,7 @@ class DatasetServer(_Server):
                          usecols=["name", "display_name"])
         df["mart"] = self.mart
         df.columns = ["Dataset_ID", "Dataset_name", "Mart_ID"]
-        df.replace(pd.np.nan, "", inplace=True)
+        df.replace(np.nan, "", inplace=True)
         if self.save:
             df.to_csv(self.output, index=False)
 
@@ -207,7 +208,7 @@ class AttributesServer(_Server):
         df["dataset"] = self.dataset
         df.columns = ["Attribute_ID", "Attribute_name",
                       "Attribute_description", "Dataset_ID"]
-        df.replace(pd.np.nan, "", inplace=True)
+        df.replace(np.nan, "", inplace=True)
         if self.save:
             df.to_csv(self.output, index=False)
 
@@ -277,7 +278,7 @@ class FiltersServer(_Server):
         df["dataset"] = self.dataset
         df.columns = ["Filter_ID", "Filter_type",
                       "Filter_description", "Dataset_ID"]
-        df.replace(pd.np.nan, "", inplace=True)
+        df.replace(np.nan, "", inplace=True)
         if self.save:
             df.to_csv(self.output, index=False)
 
@@ -389,7 +390,7 @@ class Query(_Server):
         # Type error is raised of a data type is not understood by pandas
         except TypeError:
             raise ValueError("Non valid data type is used in dtypes")
-        result.replace(pd.np.nan, "", inplace=True)
+        result.replace(np.nan, "", inplace=True)
 
         if self.save:
             result.to_csv(self.output, index=False)
@@ -443,7 +444,7 @@ class Query(_Server):
         # Type error is raised of a data type is not understood by pandas
         except TypeError:
             raise ValueError("Non valid data type is used in dtypes")
-        result.replace(pd.np.nan, "", inplace=True)
+        result.replace(np.nan, "", inplace=True)
 
         if self.save:
             result.to_csv(self.output, index=False)
