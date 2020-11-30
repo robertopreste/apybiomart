@@ -7,4 +7,4 @@ from apybiomart.apybiomart import (  # noqa
 
 __author__ = """Roberto Preste"""
 __email__ = 'robertopreste@gmail.com'
-__version__ = '0.5.2'
+__version__ = '0.5.3'
