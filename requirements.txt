@@ -15,7 +15,7 @@ pytest-runner==5.2
 pytest-cov==2.8.1
 
 click==7.0
-requests==2.22.0
+requests==2.31.0
 asyncio==3.4.3
 aiohttp==3.6.2
 pandas==0.25.3
