@@ -6,7 +6,7 @@ flake8==3.7.9
 tox==3.14.3
 coverage==5.0.3
 codecov==2.0.22
-Sphinx==3.0.4
+Sphinx==7.4.3
 sphinxcontrib-napoleon==0.7
 twine==3.1.1
 
