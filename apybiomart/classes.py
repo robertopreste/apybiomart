@@ -43,7 +43,7 @@ class _Server:
         Returns:
             bool
         """
-        url = "https://httpstat.us/200"
+        url = "http://example.org/"
         timeout = 5
         try:
             _ = requests.get(url, timeout=timeout)
